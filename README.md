@@ -3,7 +3,7 @@
 
 ![commit4](https://i.imgur.com/tIruBpP.png)
 
-[🕹 Play it](https://balajmarius.itch.io/commit4)
+### [🕹 Play it](https://balajmarius.itch.io/commit4)
 
 ### Start 🏁
 
