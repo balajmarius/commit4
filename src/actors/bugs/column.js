@@ -2,7 +2,7 @@ import { BUGS, GAME } from '../../shared/config'
 import Bug from './bug'
 
 class Column extends Phaser.Group {
-  constructor(game, name, frame, current) {
+  constructor(game, name, frame, current, player) {
     super(game, null, name)    
 
     this.x = frame.x
@@ -10,7 +10,8 @@ class Column extends Phaser.Group {
 
     this.hit = false
     this.index = current
-    this.currentPosition = 0    
+    this.currentPosition = 0
+    this.player = player  
 
     this.reset = this.reset.bind(this)
     this.render = this.render.bind(this)
@@ -52,7 +53,7 @@ class Column extends Phaser.Group {
     if (nextBug) {
       this.currentPosition++
     } else {
-      this.parent.player.die()
+      this.player.die()
     }
   }
 }

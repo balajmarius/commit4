@@ -2,7 +2,7 @@ import { PLAYER, BUGS } from '../shared/config'
 
 class Loading extends Phaser.State {
   create() {
-    this.preloader.remove()
+    this.preloader.classList.add('hide')
     this.game.state.start('play')
   }
 

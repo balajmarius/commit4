@@ -11,11 +11,10 @@ class Bugs extends Phaser.Group {
     this.y = BUGS.y
 
     this.queue = [] 
-    this.player = player
     this.updateTime = 0
 
     BUGS.frames.forEach((frame, current) => {
-      this.addChild(new Column(this.game, name, frame, current))
+      this.addChild(new Column(this.game, name, frame, current, player))
     })
 
     this.move = this.move.bind(this)

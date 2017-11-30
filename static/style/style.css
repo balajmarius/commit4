@@ -87,8 +87,13 @@ table {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	transition: 300ms ease-in-out;
 	top: 0;
 	bottom: 0;
 	left: 0;
 	right: 0;
+}
+.hide {
+	visibility: hidden;
+	opacity: 0;
 }

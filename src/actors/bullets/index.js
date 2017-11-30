@@ -11,7 +11,6 @@ class Bullets extends Phaser.Group {
 
     this.stack = []
     this.bugs = bugs
-    this.score = score
     this.updateTime = 0
 
     this.fire = this.fire.bind(this)
@@ -19,7 +18,7 @@ class Bullets extends Phaser.Group {
     this.remove = this.remove.bind(this)
 
     BULLETS.frames.forEach((frame, index) => {
-      this.addChild(new Column(this.game, name, frame, index, this.remove, this.score))
+      this.addChild(new Column(this.game, name, frame, index, this.remove, score))
     })
 
     this.game.world.addChild(this)
