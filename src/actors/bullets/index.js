@@ -10,7 +10,7 @@ class Bullets extends Phaser.Group {
     this.x = BULLETS.x
     this.y = BULLETS.y
 
-    this.stack = []
+    this.queue = []
     this.updateTime = 0
 
     this.fire = this.fire.bind(this)
@@ -25,16 +25,16 @@ class Bullets extends Phaser.Group {
   }
 
   fire(column) {
-    if (this.stack.includes(column)) {
+    if (this.queue.includes(column)) {
       return
     }
 
-    this.stack.push(column)
+    this.queue.push(column)
   }
 
   remove(column) {
-    const index = this.stack.indexOf(column)
-    this.stack.splice(index, 1)
+    const index = this.queue.indexOf(column)
+    this.queue.splice(index, 1)
   }
 
   render() {
@@ -44,7 +44,7 @@ class Bullets extends Phaser.Group {
       return
     }
 
-    this.stack.forEach(column => {
+    this.queue.forEach(column => {
       this.children[column].render()
     })
 
