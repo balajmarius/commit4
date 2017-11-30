@@ -40,18 +40,27 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+
+/*                 _ _   _ _  
+__ ___ _ __  _ __ (_) |_| | | 
+/ _/ _ \ '  \| '  \| |  _|_  _|
+\__\___/_|_|_|_|_|_|_|\__| |_| 
+																*/
+
 body {
 	color: #000000;
 	font-family: 'Anonymous Pro', Helvetica, Arial, sans-serif;
 	font-size: 18px;
 	text-transform: uppercase;
 }
+
 .game {
 	width: 771px;
 	position: relative;
 	margin: 0 auto;
 }
-.case {
+
+.game__case {
 	z-index: 200;
 	position: relative;
 	width: 771px;
@@ -60,7 +69,8 @@ body {
 	background-repeat: no-repeat;
 	background-position: center top;
 }
-.screen {
+
+.game__screen {
 	overflow: hidden;
 	width: 400px;
 	height: 300px;
@@ -68,16 +78,18 @@ body {
 	left: 190px;
 	top: 130px;
 }
-.texture {	
-	z-index: 100;
-	position: absolute;
+
+.game__screen::before {
+	top: 0;
 	left: 0;
 	right: 0;
-	top: 0;
 	bottom: 0;	
+	z-index: 100;
+	position: absolute;
 	background: url('../images/ui/texture.png');
 }
-.preloader {
+
+.loader {
 	z-index: 400;
 	position: fixed;
 	text-transform: uppercase;	
@@ -90,18 +102,41 @@ body {
 	top: 0;
 	bottom: 0;
 	left: 0;
-	right: 0;
+	right: 0;	
 }
-.preloader::before {
+
+.loader::before {
 	content: "/";
 	display: inline-block;
 	margin-bottom: 30px;
 	animation: spinner 500ms infinite;
 }
-.hide {
-	visibility: hidden;
-	opacity: 0;
+
+.loader p,
+.loader li {
+	margin-bottom: 15px;
+	display: block;
 }
+
+.loader strong {
+	border-radius: 3px;
+	padding: 3px 10px;
+	border: 1px solid #000000;
+}
+
+.loader ul {
+	margin-top: 25px;
+}
+
+.loader li::last-of-type {
+	margin-bottom: 0px;
+}
+
+.loader--is-started {
+	opacity: 0;
+	visibility: hidden;
+}
+
 @keyframes spinner {
 	0% {
 		content: "/";

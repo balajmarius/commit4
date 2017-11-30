@@ -8,6 +8,7 @@ class Controls {
     this.fire = this.fire.bind(this)
     this.goLeft = this.goLeft.bind(this)
     this.goRight = this.goRight.bind(this)
+    this.restart = this.restart.bind(this)
 
     this.left = this.game.input.keyboard.addKey(Phaser.Keyboard.LEFT)
     this.right = this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT)
@@ -17,11 +18,20 @@ class Controls {
     this.left.onDown.add(this.goLeft)
     this.right.onDown.add(this.goRight)
     this.spacebar.onDown.add(this.fire)
+    this.enter.onDown.add(this.restart)
+  }
+
+  restart() {
+    if (!this.player.dead) {
+      return
+    }
+
+    this.game.state.start('play')
   }
 
   fire() {
     if (this.player.dead) {
-      return this.game.state.start('play')
+      return
     }
 
     this.player.fire()

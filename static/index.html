@@ -11,13 +11,22 @@
 
 <body>
   <div class="game">
-    <div class="preloader">Loading, please wait...</div>
-    <div class="case"></div>
-    <div class="screen">
-      <div class="texture"></div>
-      <div id="game"></div>      
+    <div class="loader">
+      <p class="loader__message">Loading, please wait...</p>
+      <ul>
+        <li><strong>&larr;</strong> - move left</li>
+        <li><strong>&rarr;</strong> - move right</li>
+        <li><strong>SPACEBAR</strong> - fire</li>
+        <li><strong>ENTER</strong> - start</li>
+      </ul>
     </div>
-  </div>    
+
+    <div class="game__case"></div>
+    <div class="game__screen">
+      <div id="game"></div>
+    </div>
+  </div>  
+  
   <script src="//cdn.jsdelivr.net/phaser/2.6.2/phaser.min.js"></script>  
   <script type="text/javascript" src="build/bundle.js"></script>
 </body>
