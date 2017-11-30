@@ -60,7 +60,7 @@ body {
 	margin: 0 auto;
 }
 
-.game__case {
+.game__case {	
 	z-index: 200;
 	position: relative;
 	width: 771px;
@@ -87,13 +87,15 @@ body {
 	z-index: 100;
 	position: absolute;
 	background: url('../images/ui/texture.png');
+	content: "";
+	display: block;
 }
 
 .loader {
 	z-index: 400;
 	position: fixed;
 	text-transform: uppercase;	
-	background-color: #ffffff;
+	background-color: #e5e5e5;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
