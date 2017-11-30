@@ -137,6 +137,10 @@ body {
 	visibility: hidden;
 }
 
+.loader--is-loaded::before {
+	display: none;
+}
+
 @keyframes spinner {
 	0% {
 		content: "/";

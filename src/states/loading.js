@@ -7,7 +7,8 @@ class Loading extends Phaser.State {
     this.start = this.start.bind(this)
   }
 
-  create() {    
+  create() {
+    this.loader.classList.add('loader--is-loaded')
     this.message.innerHTML = 'Press <strong>ENTER</strong> to start'
 
     this.enter = this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER)
