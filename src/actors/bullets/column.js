@@ -51,6 +51,8 @@ class Column extends Phaser.Group {
       previousBullet.disable()
     }
 
+    // fix collison bug
+    // refactor this
     if (currentBug.active || nextBug.active) {
       this.hit = true
       this.score.add()
@@ -59,7 +61,6 @@ class Column extends Phaser.Group {
         return currentBug.explode()
       }
 
-      // switch bullets
       currentBullet.disable()
       previousBullet.activate()
 
@@ -67,7 +68,7 @@ class Column extends Phaser.Group {
         return nextBug.explode()
       }
     }
-        
+
     if (nextBullet) {
       this.currentPosition--
     } else {

@@ -40,6 +40,12 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+body {
+	color: #000000;
+	font-family: 'Anonymous Pro', Helvetica, Arial, sans-serif;
+	font-size: 18px;
+	text-transform: uppercase;
+}
 .game {
 	width: 771px;
 	position: relative;
@@ -71,20 +77,13 @@ table {
 	bottom: 0;	
 	background: url('../images/ui/texture.png');
 }
-.fork {	
-	top: 0;
-	right: 0;
-	border: 0;
-	position: absolute;
-}
 .preloader {
 	z-index: 400;
 	position: fixed;
-	color: #000000;
-	font-size: 18px;
-	font-family: 'Fira Sans', Helvetica, Arial, sans-serif;
+	text-transform: uppercase;	
 	background-color: #ffffff;
 	display: flex;
+	flex-direction: column;
 	align-items: center;
 	justify-content: center;
 	transition: 300ms ease-in-out;
@@ -93,7 +92,24 @@ table {
 	left: 0;
 	right: 0;
 }
+.preloader::before {
+	content: "/";
+	display: inline-block;
+	margin-bottom: 30px;
+	animation: spinner 500ms infinite;
+}
 .hide {
 	visibility: hidden;
 	opacity: 0;
+}
+@keyframes spinner {
+	0% {
+		content: "/";
+	}
+	33% {
+		content: "-";
+	}
+	66% {
+		content: "\\";
+	}
 }
