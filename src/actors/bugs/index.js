@@ -1,5 +1,5 @@
 import { BUGS, GAME } from '../../shared/config'
-import { getUniqueInteger } from '../../shared/utils'
+import { getUniqueInteger, getIsAvailable } from '../../shared/utils'
 
 import Column from './column'
 
@@ -12,6 +12,7 @@ class Bugs extends Phaser.Group {
 
     this.queue = [] 
     this.updateTime = 0
+    this.cleanTime = 0
 
     BUGS.frames.forEach((frame, current) => {
       this.addChild(new Column(this.game, name, frame, current, player))
@@ -26,9 +27,10 @@ class Bugs extends Phaser.Group {
     this.game.world.addChild(this)
   }
 
-  remove(column) {
+  remove(column) {    
     const index = this.queue.indexOf(column)
     this.queue.splice(index, 1)
+    this.cleanTime = this.game.time.now
   }
 
   spawn() {
@@ -61,18 +63,24 @@ class Bugs extends Phaser.Group {
   }
 
   render() {
-    if (this.updateTime + BUGS.timeout > this.game.time.now) {
-      return
-    }
-    
-    this.cleanup()
-    this.game.sound.play('tick')
+    const isCleanAvailable = getIsAvailable(this.cleanTime, this.game.time.now)
+    const isUpdateAvailable = getIsAvailable(this.updateTime, this.game.time.now)
 
-    if (this.queue.length > BUGS.queue) {
-      return this.move()
+    if (isCleanAvailable) {
+      this.cleanup()
     }
 
-    return this.spawn()    
+    if (isUpdateAvailable) {
+      const isSpawnFull = this.queue.length > BUGS.queue
+      
+      this.game.sound.play('tick')
+      
+      if (isSpawnFull) {
+        return this.move()
+      }
+
+      return this.spawn()
+    }
   }
 }
 

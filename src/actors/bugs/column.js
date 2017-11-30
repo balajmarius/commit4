@@ -36,7 +36,7 @@ class Column extends Phaser.Group {
   }
 
   render() {
-    if (this.hit) {
+    if (this.hit) {      
       return this.reset()
     }
 
@@ -51,10 +51,10 @@ class Column extends Phaser.Group {
     }
 
     if (nextBug) {
-      this.currentPosition++
-    } else {
-      this.player.die()
+      return this.currentPosition++
     }
+    
+    this.player.die()    
   }
 }
 

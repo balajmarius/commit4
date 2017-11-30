@@ -43,6 +43,7 @@ class Column extends Phaser.Group {
 
     const bugsColumn = this.parent.bugs.children[this.index]
     const currentBug = bugsColumn.children[this.currentPosition]
+    const nextBug = bugsColumn.children[this.currentPosition+1]
 
     currentBullet.activate()    
     
@@ -50,10 +51,21 @@ class Column extends Phaser.Group {
       previousBullet.disable()
     }
 
-    if (currentBug.active) {
+    if (currentBug.active || nextBug.active) {
       this.hit = true
       this.score.add()
-      return currentBug.explode()
+
+      if (currentBug.active) {
+        return currentBug.explode()
+      }
+
+      // switch bullets
+      currentBullet.disable()
+      previousBullet.activate()
+
+      if (nextBug.active) {        
+        return nextBug.explode()
+      }
     }
         
     if (nextBullet) {

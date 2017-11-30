@@ -1,4 +1,5 @@
 import { BULLETS, GAME } from '../../shared/config'
+import { getIsAvailable } from '../../shared/utils'
 
 import Column from './column'
 
@@ -37,7 +38,9 @@ class Bullets extends Phaser.Group {
   }
 
   render() {
-    if(this.updateTime + BULLETS.timeout > this.game.time.now) {
+    const isUpdateAvailable = getIsAvailable(this.updateTime, this.game.time.now, BULLETS.timeout)
+    
+    if (!isUpdateAvailable) {
       return
     }
 

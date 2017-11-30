@@ -1,5 +1,6 @@
 import Octocat from './octocat'
 import { PLAYER, GAME } from '../../shared/config'
+import { getIsAvailable } from '../../shared/utils'
 
 class Player extends Phaser.Group {
   constructor(game, name) {
@@ -69,7 +70,9 @@ class Player extends Phaser.Group {
   }
 
   render() {
-    if (this.fireTime + PLAYER.timeout > this.game.time.now) {
+    const isUpdateAvailable = getIsAvailable(this.fireTime, this.game.time.now, Player.timeout)
+    
+    if (!isUpdateAvailable) {
       return
     }
 
