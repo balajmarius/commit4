@@ -12,6 +12,7 @@ class Controls {
     this.left = this.game.input.keyboard.addKey(Phaser.Keyboard.LEFT)
     this.right = this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT)
     this.spacebar = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)
+    this.enter = this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER)
     
     this.left.onDown.add(this.goLeft)
     this.right.onDown.add(this.goRight)

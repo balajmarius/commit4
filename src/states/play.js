@@ -2,7 +2,7 @@ import * as Actors from '../actors'
 import * as Helpers from '../helpers'
 
 class Play extends Phaser.State {
-  create() {
+  create() {           
     this.game.add.sprite(0, 0, 'background')
 
     this.score = new Helpers.Score(this.game)

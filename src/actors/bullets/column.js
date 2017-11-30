@@ -2,7 +2,7 @@ import { GAME, BULLETS, BUGS } from '../../shared/config'
 import Bullet from './bullet'
 
 class Column extends Phaser.Group {
-  constructor(game, name, frame, index, remove, score) {
+  constructor(game, name, frame, index, remove, score, bugs) {
     super(game, null, name)    
 
     this.x = frame.x
@@ -12,6 +12,7 @@ class Column extends Phaser.Group {
     this.index = index
     this.currentPosition = 3
 
+    this.bugs = bugs
     this.score = score
     this.remove = remove
 
@@ -29,7 +30,7 @@ class Column extends Phaser.Group {
     this.hit = false
     this.currentPosition = 3    
     this.children.forEach(bullet => bullet.disable())
-    this.remove()
+    this.remove(this.index)
   }
 
   render() {
@@ -41,7 +42,7 @@ class Column extends Phaser.Group {
     const previousBullet = this.children[this.currentPosition+1]
     const nextBullet = this.children[this.currentPosition-1]
 
-    const bugsColumn = this.parent.bugs.children[this.index]
+    const bugsColumn = this.bugs.children[this.index]
     const currentBug = bugsColumn.children[this.currentPosition]
     const nextBug = bugsColumn.children[this.currentPosition+1]
 
