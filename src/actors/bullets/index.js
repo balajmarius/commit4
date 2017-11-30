@@ -1,0 +1,53 @@
+import { BULLETS, GAME } from '../../shared/config'
+
+import Column from './column'
+
+class Bullets extends Phaser.Group {
+  constructor(game, name, bugs, score) {
+    super(game, null, name)
+
+    this.x = BULLETS.x
+    this.y = BULLETS.y
+
+    this.stack = []
+    this.bugs = bugs
+    this.score = score
+    this.updateTime = 0
+
+    this.fire = this.fire.bind(this)
+    this.render = this.render.bind(this)
+    this.remove = this.remove.bind(this)
+
+    BULLETS.frames.forEach((frame, index) => {
+      this.addChild(new Column(this.game, name, frame, index, this.remove, this.score))
+    })
+
+    this.game.world.addChild(this)
+  }
+
+  fire(column) {
+    if (this.stack.includes(column)) {
+      return
+    }
+
+    this.stack.push(column)
+  }
+
+  remove() {
+    this.stack.shift()
+  }
+
+  render() {
+    if(this.updateTime + BULLETS.timeout > this.game.time.now) {
+      return
+    }
+
+    this.stack.forEach(column => {
+      this.children[column].render()
+    })
+
+    this.updateTime = this.game.time.now
+  }
+}
+
+export default Bullets

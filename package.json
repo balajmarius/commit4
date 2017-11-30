@@ -1,0 +1,20 @@
+{
+  "name": "commit-4",
+  "version": "1.0.0",
+  "description": "Classic LCD game",
+  "main": "index.js",
+  "repository": "https://github.com/balajmarius/commit-4.git",
+  "author": "Balaj Marius <balajmarius93@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "export NODE_ENV=development && node fuse",
+    "build": "export NODE_ENV=production && node fuse"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "fuse-box": "^2.5.0-beta.1",
+    "uglify-js": "^3.2.0"
+  },
+  "dependencies": {}
+}

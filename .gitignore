@@ -1,0 +1,4 @@
+.fusebox
+static/build
+static/build/*.js
+static/build/*.map
