@@ -1,7 +1,9 @@
 import { GAME } from '../../shared/config'
 
 class Octocat extends Phaser.Group {
+
   constructor(game, name, coordinates, frame) {
+
     super(game, null, `${name}-${frame}`)
 
     this.x = coordinates.x
@@ -16,29 +18,39 @@ class Octocat extends Phaser.Group {
     const tentacles = this.create(0, 0, `${name}-tentacles`, frame)
 
     tentacles.alpha = GAME.alpha.disabled
-    body.alpha = frame ? GAME.alpha.disabled : GAME.alpha.active    
+    body.alpha = frame ? GAME.alpha.disabled : GAME.alpha.active
 
     this.game.world.addChild(this)
+  
   }
 
   disarm() {
-    const [,tentacles] = this.children
+
+    const [, tentacles] = this.children
     tentacles.alpha = GAME.alpha.disabled
+  
   }
 
   fire() {
-    const [,tentacles] = this.children
+
+    const [, tentacles] = this.children
     tentacles.alpha = GAME.alpha.active
+  
   }
 
   disable() {
-    this.children.forEach(frame => frame.alpha = GAME.alpha.disabled)
+
+    this.children.forEach(frame => (frame.alpha = GAME.alpha.disabled))
+  
   }
 
   activate() {
+
     const [body] = this.children
     body.alpha = GAME.alpha.active
+  
   }
+
 }
 
 export default Octocat

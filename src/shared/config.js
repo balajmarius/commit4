@@ -22,7 +22,7 @@ export const PLAYER = {
     { x: 132, y: 0 },
     { x: 212, y: 0 },
     { x: 270, y: 0 }
-  ]  
+  ]
 }
 
 export const BUGS = {
@@ -96,7 +96,7 @@ export const BULLETS = {
     {
       x: 0,
       y: 0,
-      bullets: [                      
+      bullets: [
         { x: 1, y: 3 },
         { x: 15, y: 55 },
         { x: 31, y: 110 },
@@ -106,12 +106,12 @@ export const BULLETS = {
     {
       x: 82,
       y: 0,
-      bullets: [                     
+      bullets: [
         { x: 0, y: 2 },
         { x: 15, y: 59 },
         { x: 30, y: 112 },
         { x: 46, y: 164 }
-      ]   
+      ]
     },
     {
       x: 159,
@@ -121,17 +121,17 @@ export const BULLETS = {
         { x: 19, y: 65 },
         { x: 32, y: 115 },
         { x: 48, y: 163 }
-      ]   
+      ]
     },
     {
       x: 239,
       y: 0,
-      bullets: [                      
+      bullets: [
         { x: 1, y: 4 },
         { x: 16, y: 58 },
         { x: 32, y: 113 },
         { x: 48, y: 165 }
-      ]   
+      ]
     }
-  ] 
+  ]
 }

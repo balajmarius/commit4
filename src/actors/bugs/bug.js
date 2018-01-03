@@ -1,7 +1,9 @@
 import { GAME } from '../../shared/config'
 
 class Bug extends Phaser.Group {
+
   constructor(game, name, coordinates, current, index, remove) {
+
     super(game, null, `${name}-skeleton`)
 
     this.x = coordinates.x
@@ -18,29 +20,37 @@ class Bug extends Phaser.Group {
 
     this.explode = this.explode.bind(this)
     this.disable = this.disable.bind(this)
-    this.activate = this.activate.bind(this)    
+    this.activate = this.activate.bind(this)
 
     this.game.world.addChild(this)
+  
   }
 
-  explode() {    
-    const [,explosion] = this.children
+  explode() {
+
+    const [, explosion] = this.children
     explosion.alpha = GAME.alpha.active
-    this.active = true    
+    this.active = true
     this.remove()
     this.game.sound.play('explode')
+  
   }
 
-  disable() {    
-    this.children.forEach(frame => frame.alpha = GAME.alpha.disabled)
+  disable() {
+
+    this.children.forEach(frame => (frame.alpha = GAME.alpha.disabled))
     this.active = false
+  
   }
 
-  activate() {        
+  activate() {
+
     const [body] = this.children
     body.alpha = GAME.alpha.active
     this.active = true
+  
   }
+
 }
 
 export default Bug

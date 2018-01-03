@@ -3,6 +3,12 @@
 
 ![commit4](https://i.imgur.com/tIruBpP.png)
 
+### Lint 🎩
+
+```bash
+npm run lint
+```
+
 ### Start 🏁
 
 ```bash
