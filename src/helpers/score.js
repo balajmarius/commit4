@@ -1,4 +1,5 @@
-import { GAME } from '../shared/config'
+import { GAME, BUGS } from '../shared/config'
+import { SCORE_DIFFICULTY_MAP } from './levels'
 
 class Score extends Phaser.BitmapText {
 
@@ -18,6 +19,12 @@ class Score extends Phaser.BitmapText {
   add() {
 
     this.text++
+
+    if (SCORE_DIFFICULTY_MAP[this.text]) {
+
+      BUGS.timeout = SCORE_DIFFICULTY_MAP[this.text]
+
+    }
 
   }
 

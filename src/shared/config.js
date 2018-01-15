@@ -1,3 +1,5 @@
+import { DIFFICULTY_MAP } from '../helpers/levels'
+
 export const GAME = {
   width: 400,
   height: 300,
@@ -24,7 +26,7 @@ export const BUGS = {
   x: 0,
   y: 0,
   queue: 2,
-  timeout: 500,
+  timeout: DIFFICULTY_MAP.EASY,
   frames: [
     {
       x: 0,
