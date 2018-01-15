@@ -25,18 +25,18 @@ class Player extends Phaser.Group {
     PLAYER.frames.forEach((coordinates, frame) => {
 
       this.addChild(new Octocat(this.game, name, coordinates, frame))
-    
+
     })
 
     this.game.world.addChild(this)
-  
+
   }
 
   die() {
 
     this.dead = true
     this.game.sound.play('die')
-  
+
   }
 
   fire() {
@@ -45,7 +45,7 @@ class Player extends Phaser.Group {
 
     this.children[this.currentPosition].fire()
     this.fireTime = this.game.time.now
-  
+
   }
 
   move() {
@@ -57,57 +57,57 @@ class Player extends Phaser.Group {
       if (this.currentPosition !== index) {
 
         return octocat.disable()
-      
+
       }
 
       return octocat.activate()
-    
+
     })
-  
+
   }
 
   goLeft() {
 
     if (!this.children[this.currentPosition - 1]) {
 
-      return
-    
+      this.currentPosition = this.children.length - 1
+
+    } else {
+
+      this.currentPosition--
+
     }
 
-    this.currentPosition--
     this.move()
-  
+
   }
 
   goRight() {
 
     if (!this.children[this.currentPosition + 1]) {
 
-      return
-    
+      this.currentPosition = 0
+
+    } else {
+
+      this.currentPosition++
+
     }
 
-    this.currentPosition++
     this.move()
-  
+
   }
 
   render() {
 
-    const isUpdateAvailable = getIsAvailable(
-      this.fireTime,
-      this.game.time.now,
-      Player.timeout
-    )
+    const isUpdateAvailable = getIsAvailable(this.fireTime, this.game.time.now, Player.timeout)
 
-    if (!isUpdateAvailable) {
+    if (isUpdateAvailable) {
 
-      return
+      this.children[this.currentPosition].disarm()
     
     }
 
-    this.children[this.currentPosition].disarm()
-  
   }
 
 }

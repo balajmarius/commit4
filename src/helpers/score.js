@@ -12,13 +12,13 @@ class Score extends Phaser.BitmapText {
     this.add = this.add.bind(this)
 
     this.game.world.addChild(this)
-  
+
   }
 
   add() {
 
     this.text++
-  
+
   }
 
 }

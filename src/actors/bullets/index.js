@@ -31,13 +31,11 @@ class Bullets extends Phaser.Group {
 
   fire(column) {
 
-    if (this.queue.includes(column)) {
+    if (!this.queue.includes(column)) {
 
-      return
+      this.queue.push(column)
 
     }
-
-    this.queue.push(column)
 
   }
 

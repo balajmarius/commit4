@@ -20,14 +20,12 @@ class Column extends Phaser.Group {
 
     frame.bugs.forEach((coordinates, index) => {
 
-      this.addChild(
-        new Bug(this.game, name, coordinates, current, index, this.remove)
-      )
-    
+      this.addChild(new Bug(this.game, name, coordinates, current, index, this.remove))
+
     })
 
     this.game.world.addChild(this)
-  
+
   }
 
   reset() {
@@ -35,14 +33,14 @@ class Column extends Phaser.Group {
     this.hit = false
     this.currentPosition = 0
     this.children.forEach(bug => bug.disable())
-  
+
   }
 
   remove() {
 
     this.hit = true
     this.parent.remove(this.index)
-  
+
   }
 
   render() {
@@ -50,7 +48,7 @@ class Column extends Phaser.Group {
     if (this.hit) {
 
       return this.reset()
-    
+
     }
 
     const currentBug = this.children[this.currentPosition]
@@ -62,17 +60,17 @@ class Column extends Phaser.Group {
     if (previousBug) {
 
       previousBug.disable()
-    
+
     }
 
     if (nextBug) {
 
       return this.currentPosition++
-    
+
     }
 
     this.player.die()
-  
+
   }
 
 }
