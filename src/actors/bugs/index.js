@@ -19,7 +19,7 @@ class Bugs extends Phaser.Group {
     BUGS.frames.forEach((frame, current) => {
 
       this.addChild(new Column(this.game, name, frame, current, player))
-    
+
     })
 
     this.move = this.move.bind(this)
@@ -29,7 +29,7 @@ class Bugs extends Phaser.Group {
     this.cleanup = this.cleanup.bind(this)
 
     this.game.world.addChild(this)
-  
+
   }
 
   remove(column) {
@@ -37,7 +37,7 @@ class Bugs extends Phaser.Group {
     const index = this.queue.indexOf(column)
     this.queue.splice(index, 1)
     this.cleanTime = this.game.time.now
-  
+
   }
 
   spawn() {
@@ -45,14 +45,14 @@ class Bugs extends Phaser.Group {
     if (this.queue.length === this.children.length) {
 
       return
-    
+
     }
 
     const currentSpawn = getUniqueInteger(this.queue, this.children, this.game)
 
     this.queue.push(currentSpawn)
     this.updateTime = this.game.time.now
-  
+
   }
 
   move() {
@@ -60,7 +60,7 @@ class Bugs extends Phaser.Group {
     if (!this.queue.length) {
 
       return
-    
+
     }
 
     const current = this.queue.shift()
@@ -70,45 +70,42 @@ class Bugs extends Phaser.Group {
 
     this.queue.push(current)
     this.updateTime = this.game.time.now
-  
+
   }
 
   cleanup() {
 
     this.children.forEach(column => column.hit && column.reset())
-  
+
   }
 
   render() {
 
     const isCleanAvailable = getIsAvailable(this.cleanTime, this.game.time.now)
-    const isUpdateAvailable = getIsAvailable(
-      this.updateTime,
-      this.game.time.now
-    )
+    const isUpdateAvailable = getIsAvailable(this.updateTime, this.game.time.now)
 
     if (isCleanAvailable) {
 
       this.cleanup()
-    
+
     }
 
     if (isUpdateAvailable) {
 
       const isSpawnFull = this.queue.length > BUGS.queue
 
-      this.game.sound.play('tick')
-
       if (isSpawnFull) {
+
+        this.game.sound.play('tick')
 
         return this.move()
       
       }
 
       return this.spawn()
-    
+
     }
-  
+
   }
 
 }
