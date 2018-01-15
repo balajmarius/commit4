@@ -8,12 +8,13 @@
   "license": "MIT",
   "scripts": {
     "lint": "eslint --config .eslintrc.js src/ --fix",
-    "start": "NODE_ENV=development node fuse",
-    "build": "NODE_ENV=production node fuse"
+    "start": "cross-env NODE_ENV=development node fuse",
+    "build": "cross-env NODE_ENV=production node fuse"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
+    "cross-env": "^5.1.3",
     "eslint": "^4.14.0",
     "eslint-config-marius": "^1.0.1",
     "eslint-plugin-import": "^2.8.0",
