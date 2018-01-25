@@ -21,57 +21,47 @@ class Bullets extends Phaser.Group {
 
     BULLETS.frames.forEach((frame, index) => {
 
-      this.addChild(
-        new Column(this.game, name, frame, index, this.remove, score, bugs)
-      )
-    
+      this.addChild(new Column(this.game, name, frame, index, this.remove, score, bugs))
+
     })
 
     this.game.world.addChild(this)
-  
+
   }
 
   fire(column) {
 
-    if (this.queue.includes(column)) {
+    if (!this.queue.includes(column)) {
 
-      return
-    
+      this.queue.push(column)
+
     }
 
-    this.queue.push(column)
-  
   }
 
   remove(column) {
 
     const index = this.queue.indexOf(column)
     this.queue.splice(index, 1)
-  
+
   }
 
   render() {
 
-    const isUpdateAvailable = getIsAvailable(
-      this.updateTime,
-      this.game.time.now,
-      BULLETS.timeout
-    )
+    const isUpdateAvailable = getIsAvailable(this.updateTime, this.game.time.now, BULLETS.timeout)
 
-    if (!isUpdateAvailable) {
+    if (isUpdateAvailable) {
 
-      return
-    
+      this.queue.forEach(column => {
+
+        this.children[column].render()
+
+      })
+
+      this.updateTime = this.game.time.now
+
     }
 
-    this.queue.forEach(column => {
-
-      this.children[column].render()
-    
-    })
-
-    this.updateTime = this.game.time.now
-  
   }
 
 }

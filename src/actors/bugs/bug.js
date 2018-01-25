@@ -23,7 +23,7 @@ class Bug extends Phaser.Group {
     this.activate = this.activate.bind(this)
 
     this.game.world.addChild(this)
-  
+
   }
 
   explode() {
@@ -33,14 +33,14 @@ class Bug extends Phaser.Group {
     this.active = true
     this.remove()
     this.game.sound.play('explode')
-  
+
   }
 
   disable() {
 
     this.children.forEach(frame => (frame.alpha = GAME.alpha.disabled))
     this.active = false
-  
+
   }
 
   activate() {
@@ -48,7 +48,7 @@ class Bug extends Phaser.Group {
     const [body] = this.children
     body.alpha = GAME.alpha.active
     this.active = true
-  
+
   }
 
 }

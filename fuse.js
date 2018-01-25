@@ -8,7 +8,9 @@ const name = isDevelopment ? 'build/bundle' : 'build/dist.min'
 const plugins = [fsbx.BabelPlugin()]
 
 if (!isDevelopment) {
+
   plugins.push(fsbx.UglifyJSPlugin())
+
 }
 
 // config
@@ -18,26 +20,26 @@ const fuse = fsbx.FuseBox.init({
   debug: isDevelopment,
   log: isDevelopment,
   sourceMaps: isDevelopment,
-  plugins
+  plugins,
 })
 
 // start dev server
 if (isDevelopment) {
+
   fuse.dev({
     open: true,
-    root: 'static'
+    root: 'static',
   })
+
 }
 
 // bundle
-const bundler = fuse
-  .bundle(name)  
-  .instructions('>main.js')  
+const bundler = fuse.bundle(name).instructions('>main.js')
 
 if (isDevelopment) {
-  bundler
-    .watch('src/**')
-    .hmr()
+
+  bundler.watch('src/**').hmr()
+
 }
 
 fuse.run()

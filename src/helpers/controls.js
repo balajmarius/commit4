@@ -21,56 +21,48 @@ class Controls {
     this.right.onDown.add(this.goRight)
     this.spacebar.onDown.add(this.fire)
     this.enter.onDown.add(this.restart)
-  
+
   }
 
   restart() {
 
-    if (!this.player.dead) {
+    if (this.player.dead) {
 
-      return
-    
+      this.game.state.start('play')
+
     }
 
-    this.game.state.start('play')
-  
   }
 
   fire() {
 
-    if (this.player.dead) {
+    if (!this.player.dead) {
 
-      return
-    
+      this.player.fire()
+      this.bullets.fire(this.player.currentPosition)
+
     }
 
-    this.player.fire()
-    this.bullets.fire(this.player.currentPosition)
-  
   }
 
   goLeft() {
 
-    if (this.player.dead) {
+    if (!this.player.dead) {
 
-      return
-    
+      this.player.goLeft()
+
     }
 
-    this.player.goLeft()
-  
   }
 
   goRight() {
 
-    if (this.player.dead) {
+    if (!this.player.dead) {
 
-      return
-    
+      this.player.goRight()
+
     }
 
-    this.player.goRight()
-  
   }
 
 }

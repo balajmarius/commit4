@@ -2,3 +2,4 @@
 static/build
 static/build/*.js
 static/build/*.map
+node_modules
