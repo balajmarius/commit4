@@ -70,13 +70,11 @@ class Player extends Phaser.Group {
 
     if (!this.children[this.currentPosition - 1]) {
 
-      this.currentPosition = this.children.length - 1
-
-    } else {
-
-      this.currentPosition--
+      return
 
     }
+
+    this.currentPosition--
 
     this.move()
 
@@ -86,13 +84,11 @@ class Player extends Phaser.Group {
 
     if (!this.children[this.currentPosition + 1]) {
 
-      this.currentPosition = 0
-
-    } else {
-
-      this.currentPosition++
+      return
 
     }
+
+    this.currentPosition++
 
     this.move()
 
@@ -105,7 +101,7 @@ class Player extends Phaser.Group {
     if (isUpdateAvailable) {
 
       this.children[this.currentPosition].disarm()
-    
+
     }
 
   }
