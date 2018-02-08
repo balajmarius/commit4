@@ -1,3 +1,6 @@
+import { BUGS } from '../shared/config'
+import { DIFFICULTY_MAP } from './levels'
+
 class Controls {
 
   constructor(game, player, bullets, bugs) {
@@ -27,8 +30,8 @@ class Controls {
   restart() {
 
     if (this.player.dead) {
-
-      this.game.state.start('play')
+        BUGS.timeout = DIFFICULTY_MAP.EASY
+        this.game.state.start('play')
 
     }
 
