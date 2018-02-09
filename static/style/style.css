@@ -52,6 +52,7 @@ body {
 	font-family: 'Anonymous Pro', Helvetica, Arial, sans-serif;
 	font-size: 18px;
 	text-transform: uppercase;
+	overflow: hidden;
 }
 
 .game {
@@ -66,6 +67,56 @@ body {
 	width: 771px;
 	height: 1110px;
 	background-image: url('../images/ui/case.png');
+	background-repeat: no-repeat;
+	background-position: center top;
+}
+
+.start__button {	
+	z-index: 300;
+	position: absolute;
+	left: 249px;
+	top: 570px;
+	width: 57px;
+	opacity: 0.0;
+	height: 79px;
+	background-image: url('../images/ui/fire_pressed.jpg');
+	background-repeat: no-repeat;
+	background-position: center top;
+}
+
+.left__button {	
+	z-index: 300;
+	position: absolute;
+	left: 120px;
+	top: 552px;
+	width: 82px;
+	opacity: 0.0;
+	height: 136px;
+	background-image: url('../images/ui/left_pressed.jpg');
+	background-repeat: no-repeat;
+	background-position: center top;
+}
+.right__button {	
+	z-index: 300;
+	position: absolute;
+	left: 580px;
+	top: 551px;
+	width: 76px;
+	opacity: 0.0;
+	height: 110px;
+	background-image: url('../images/ui/right_pressed.jpg');
+	background-repeat: no-repeat;
+	background-position: center top;
+}
+.commit__button {	
+	z-index: 300;
+	position: absolute;
+	left: 468px;
+	top: 555px;
+	width: 74px;
+	opacity: 0.0;
+	height: 106px;
+	background-image: url('../images/ui/commit_pressed.png');
 	background-repeat: no-repeat;
 	background-position: center top;
 }
@@ -104,7 +155,7 @@ body {
 	top: 0;
 	bottom: 0;
 	left: 0;
-	right: 0;	
+	right: 0;
 }
 
 .loader::before {

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
+  <meta id="viewport" name="viewport">
   <link rel="icon" type="image/x-icon" href="images/favicon.ico">
   <title>COMMIT 4</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Anonymous+Pro">  
@@ -21,7 +21,12 @@
       </ul>
     </div>
 
-    <div class="game__case"></div>
+    <div class="game__case">
+      <div class="start__button"></div>
+      <div class="left__button"></div>
+      <div class="right__button"></div>
+      <div class="commit__button"></div>
+    </div>
     <div class="game__screen">
       <div id="game"></div>
     </div>
@@ -29,5 +34,32 @@
   
   <script src="//cdn.jsdelivr.net/phaser/2.6.2/phaser.min.js"></script>  
   <script type="text/javascript" src="build/dist.min.js"></script>
+
+  <script type="text/javascript">
+    //mobile viewport hack
+    // https://stackoverflow.com/questions/8735457/scale-fit-mobile-web-content-using-viewport-meta-tag
+    (function(){
+    
+      function apply_viewport(){
+        if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)   ) {
+    
+          var ww = window.screen.width;
+          var mw = 771; // min width of site
+          var ratio =  ww / mw; //calculate ratio
+          var viewport_meta_tag = document.getElementById('viewport');
+          // always scale
+          viewport_meta_tag.setAttribute('content', 'initial-scale=' + ratio + ', maximum-scale=' + ratio + ', minimum-scale=' + ratio + ', user-scalable=no, width=' + mw);
+        }
+      }
+    
+      //ok, i need to update viewport scale if screen dimentions changed
+      window.addEventListener('resize', function(){
+        apply_viewport();
+      });
+    
+      apply_viewport();
+    
+    }());
+    </script>
 </body>
 </html>
