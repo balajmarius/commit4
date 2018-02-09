@@ -52,6 +52,7 @@ body {
 	font-family: 'Anonymous Pro', Helvetica, Arial, sans-serif;
 	font-size: 18px;
 	text-transform: uppercase;
+	overflow: hidden;
 }
 
 .game {
