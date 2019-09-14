@@ -1,5 +1,3 @@
-.fusebox
-static/build
-static/build/*.js
-static/build/*.map
+.cache
+dist
 node_modules
