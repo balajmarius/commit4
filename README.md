@@ -1,24 +1,18 @@
 # COMMIT 4 🎮
+
 > digital LCD mini-game
 
-![commit4](https://i.imgur.com/tIruBpP.png)
+![Octocat](https://i.imgur.com/07AorFP.png)
 
-# ✨ Winner of ["Best theme interpretation"](https://github.com/blog/2483-game-off-2017-winners)
-
-### Lint 🎩
+## Develop
 
 ```bash
-npm run lint
+npm run development
 ```
 
-### Start 🏁
-
-```bash
-npm run start
-```
-
-### Build 📦
+## Build
 
 ```bash
 npm run build
 ```
+

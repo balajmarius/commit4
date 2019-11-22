@@ -3,5 +3,8 @@
   "plugins": ["@typescript-eslint"],
   "rules": {
     "no-console": "warn"
+  },
+  "globals": {
+    "Phaser": "readonly"
   }
 }
