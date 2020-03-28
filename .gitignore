@@ -1,3 +1,9 @@
+.DS_*
+*.log
+logs
+**/*.backup.*
+**/*.back.*
+
 .cache
-dist
-node_modules
+dist/
+node_modules/
