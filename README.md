@@ -7,12 +7,11 @@
 ## Develop
 
 ```bash
-npm run development
+yarn dev
 ```
 
 ## Build
 
 ```bash
-npm run build
+yarn build
 ```
-
