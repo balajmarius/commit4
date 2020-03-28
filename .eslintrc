@@ -1,8 +1,11 @@
 {
-  "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint"],
+  "extends": "standard",
   "rules": {
-    "no-console": "warn"
+    "no-console": "warn",
+    "quotes": "off",
+    "semi": "off",
+    "comma-dangle": "off",
+    "space-before-function-paren": "off"
   },
   "globals": {
     "Phaser": "readonly"

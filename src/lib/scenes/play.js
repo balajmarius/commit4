@@ -9,7 +9,5 @@ export default class PlayScene extends Phaser.Scene {
     });
   }
 
-  create() {
-    console.log("hahah");
-  }
+  create() {}
 }
