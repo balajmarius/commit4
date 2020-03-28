@@ -1,7 +1,7 @@
 {
   "textures": [
     {
-      "image": "atlas.png",
+      "image": "atlas",
       "format": "RGBA8888",
       "size": {
         "w": 402,
@@ -10,7 +10,7 @@
       "scale": 1,
       "frames": [
         {
-          "filename": "background.png",
+          "filename": "battleground",
           "rotated": false,
           "trimmed": false,
           "sourceSize": {
@@ -199,7 +199,7 @@
           }
         },
         {
-          "filename": "octocat-body.png",
+          "filename": "torso",
           "rotated": false,
           "trimmed": true,
           "sourceSize": {
@@ -220,7 +220,7 @@
           }
         },
         {
-          "filename": "octocat-tentacles.png",
+          "filename": "tentacles",
           "rotated": false,
           "trimmed": true,
           "sourceSize": {

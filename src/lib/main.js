@@ -1,6 +1,11 @@
 import Phaser from "phaser";
 
-import { GAME_WIDTH, GAME_HEIGHT, GAME_TITLE, GAME_PARENT } from "./utils/const";
+import {
+  GAME_WIDTH,
+  GAME_HEIGHT,
+  GAME_TITLE,
+  GAME_PARENT,
+} from "./utils/const";
 
 import PlayScene from "./scenes/play";
 import BootScene from "./scenes/boot";
