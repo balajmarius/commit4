@@ -7,22 +7,19 @@
   "author": "Balaj Marius <balajmarius93@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "parcel serve src/index.html",
-    "lint": "eslint 'src/**/*.ts'",
+    "clean": "rm -rf dist/",
+    "lint": "eslint 'src/**/*.js'",
+    "dev": " parcel src/index.html --no-hmr",
     "build": "parcel build src/index.html"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "2.2.0",
-    "@typescript-eslint/parser": "2.2.0",
-    "eslint": "6.4.0",
-    "parcel": "1.12.3",
-    "typescript": "3.6.3"
+    "eslint": "6.8.0",
+    "parcel": "1.12.4",
+    "parcel-plugin-asset-copier": "^1.0.0",
+    "prettier": "^2.0.2"
   },
   "dependencies": {
-    "phaser": "3.19.0"
+    "phaser": "3.22.0"
   },
-  "typeRoots": [
-    "./node_modules/phaser/types"
-  ],
-  "types": "Phaser"
+  "assetsPath": "src/assets"
 }
