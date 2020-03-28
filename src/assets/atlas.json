@@ -1,0 +1,267 @@
+{
+  "textures": [
+    {
+      "image": "atlas.png",
+      "format": "RGBA8888",
+      "size": {
+        "w": 402,
+        "h": 707
+      },
+      "scale": 1,
+      "frames": [
+        {
+          "filename": "background.png",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 400,
+            "h": 300
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 400,
+            "h": 300
+          },
+          "frame": {
+            "x": 1,
+            "y": 1,
+            "w": 400,
+            "h": 300
+          }
+        },
+        {
+          "filename": "bugs-3.png",
+          "rotated": false,
+          "trimmed": true,
+          "sourceSize": {
+            "w": 360,
+            "h": 40
+          },
+          "spriteSourceSize": {
+            "x": 21,
+            "y": 7,
+            "w": 327,
+            "h": 33
+          },
+          "frame": {
+            "x": 1,
+            "y": 303,
+            "w": 327,
+            "h": 33
+          }
+        },
+        {
+          "filename": "bullets.png",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 7,
+            "h": 14
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 7,
+            "h": 14
+          },
+          "frame": {
+            "x": 330,
+            "y": 303,
+            "w": 7,
+            "h": 14
+          }
+        },
+        {
+          "filename": "bugs-0.png",
+          "rotated": false,
+          "trimmed": true,
+          "sourceSize": {
+            "w": 350,
+            "h": 55
+          },
+          "spriteSourceSize": {
+            "x": 20,
+            "y": 9,
+            "w": 319,
+            "h": 46
+          },
+          "frame": {
+            "x": 1,
+            "y": 338,
+            "w": 319,
+            "h": 46
+          }
+        },
+        {
+          "filename": "bugs-2.png",
+          "rotated": false,
+          "trimmed": true,
+          "sourceSize": {
+            "w": 350,
+            "h": 52
+          },
+          "spriteSourceSize": {
+            "x": 22,
+            "y": 7,
+            "w": 319,
+            "h": 41
+          },
+          "frame": {
+            "x": 1,
+            "y": 386,
+            "w": 319,
+            "h": 41
+          }
+        },
+        {
+          "filename": "bugs-1.png",
+          "rotated": false,
+          "trimmed": true,
+          "sourceSize": {
+            "w": 325,
+            "h": 39
+          },
+          "spriteSourceSize": {
+            "x": 17,
+            "y": 1,
+            "w": 301,
+            "h": 38
+          },
+          "frame": {
+            "x": 1,
+            "y": 429,
+            "w": 301,
+            "h": 38
+          }
+        },
+        {
+          "filename": "explosions-3.png",
+          "rotated": false,
+          "trimmed": true,
+          "sourceSize": {
+            "w": 360,
+            "h": 40
+          },
+          "spriteSourceSize": {
+            "x": 8,
+            "y": 0,
+            "w": 281,
+            "h": 40
+          },
+          "frame": {
+            "x": 1,
+            "y": 469,
+            "w": 281,
+            "h": 40
+          }
+        },
+        {
+          "filename": "explosions-2.png",
+          "rotated": false,
+          "trimmed": true,
+          "sourceSize": {
+            "w": 350,
+            "h": 52
+          },
+          "spriteSourceSize": {
+            "x": 4,
+            "y": 0,
+            "w": 277,
+            "h": 52
+          },
+          "frame": {
+            "x": 1,
+            "y": 511,
+            "w": 277,
+            "h": 52
+          }
+        },
+        {
+          "filename": "explosions-0.png",
+          "rotated": false,
+          "trimmed": true,
+          "sourceSize": {
+            "w": 350,
+            "h": 55
+          },
+          "spriteSourceSize": {
+            "x": 5,
+            "y": 0,
+            "w": 276,
+            "h": 50
+          },
+          "frame": {
+            "x": 1,
+            "y": 565,
+            "w": 276,
+            "h": 50
+          }
+        },
+        {
+          "filename": "octocat-body.png",
+          "rotated": false,
+          "trimmed": true,
+          "sourceSize": {
+            "w": 192,
+            "h": 48
+          },
+          "spriteSourceSize": {
+            "x": 2,
+            "y": 0,
+            "w": 185,
+            "h": 48
+          },
+          "frame": {
+            "x": 1,
+            "y": 617,
+            "w": 185,
+            "h": 48
+          }
+        },
+        {
+          "filename": "octocat-tentacles.png",
+          "rotated": false,
+          "trimmed": true,
+          "sourceSize": {
+            "w": 192,
+            "h": 48
+          },
+          "spriteSourceSize": {
+            "x": 7,
+            "y": 11,
+            "w": 185,
+            "h": 32
+          },
+          "frame": {
+            "x": 188,
+            "y": 617,
+            "w": 185,
+            "h": 32
+          }
+        },
+        {
+          "filename": "explosions-1.png",
+          "rotated": false,
+          "trimmed": true,
+          "sourceSize": {
+            "w": 325,
+            "h": 39
+          },
+          "spriteSourceSize": {
+            "x": 2,
+            "y": 0,
+            "w": 259,
+            "h": 39
+          },
+          "frame": {
+            "x": 1,
+            "y": 667,
+            "w": 259,
+            "h": 39
+          }
+        }
+      ]
+    }
+  ]
+}
