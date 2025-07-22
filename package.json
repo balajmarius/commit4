@@ -19,7 +19,7 @@
     "eslint-config-marius": "^1.0.1",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-react": "^7.5.1",
-    "fuse-box": "^2.5.0-beta.1",
+    "fuse-box": "^4.0.0",
     "prettier-eslint": "^8.7.0",
     "uglify-js": "^3.2.0"
   }
