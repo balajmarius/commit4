@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body {
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    color: #000000;
+    font-family: 'Anonymous Pro', Helvetica, Arial, sans-serif;
+    font-size: 18px;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  ol, ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.loader-spinner::before {
+  content: "/";
+  display: inline-block;
+  animation: spinner 500ms infinite;
+}
+
+@keyframes spinner {
+  0% {
+    content: "/";
+  }
+  33% {
+    content: "-";
+  }
+  66% {
+    content: "\\";
+  }
+}
