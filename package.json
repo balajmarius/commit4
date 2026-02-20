@@ -1,26 +1,29 @@
 {
   "name": "commit-4",
-  "version": "1.0.0",
-  "description": "Classic LCD game",
-  "main": "src/main.js",
+  "private": true,
+  "version": "2.0.0",
+  "description": "Classic LCD game — React + TypeScript rewrite",
   "repository": "https://github.com/balajmarius/commit4",
   "author": "Balaj Marius <balajmarius93@gmail.com>",
   "license": "MIT",
+  "type": "module",
   "scripts": {
-    "lint": "eslint --config .eslintrc.js src/ --fix",
-    "start": "cross-env NODE_ENV=development node fuse",
-    "build": "cross-env NODE_ENV=production node fuse"
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "babel-core": "^6.26.0",
-    "babel-preset-es2015": "^6.24.1",
-    "cross-env": "^5.1.3",
-    "eslint": "^4.14.0",
-    "eslint-config-marius": "^1.0.1",
-    "eslint-plugin-import": "^2.8.0",
-    "eslint-plugin-react": "^7.5.1",
-    "fuse-box": "^2.5.0-beta.1",
-    "prettier-eslint": "^8.7.0",
-    "uglify-js": "^3.2.0"
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.16",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.11"
   }
 }
