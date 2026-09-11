@@ -1,0 +1,23 @@
+import { Howl } from "howler";
+
+import die from "@/static/sounds/die.mp3?url";
+import hit from "@/static/sounds/hit.mp3?url";
+import tick from "@/static/sounds/tick.mp3?url";
+import keyPress from "@/static/sounds/keyPress.mp3?url";
+
+const SFX = {
+  "bug/die": new Howl({ src: [die] }),
+  "octo/hit": new Howl({ src: [hit] }),
+  "game/tick": new Howl({ src: [tick] }),
+  "game/keyPress": new Howl({ src: [keyPress] }),
+} as const;
+
+export type Sfx = keyof typeof SFX;
+
+export const useSfx = () => {
+  const play = (sfx: Sfx) => {
+    SFX[sfx].play();
+  };
+
+  return { play };
+};

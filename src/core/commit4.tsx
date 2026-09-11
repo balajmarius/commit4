@@ -1,10 +1,13 @@
-import { Application } from "@pixi/react";
+import { Suspense } from "react";
 
-const SCENE_WIDTH = 400;
-const SCENE_HEIGHT = 300;
+import { Scene } from "@/core/scene";
 
 export const Commit4 = () => {
   return (
-    <Application width={SCENE_WIDTH} height={SCENE_HEIGHT} />
+    <div className="after:bg-screen after:bg-no-repeat after:absolute after:inset-0">
+      <Suspense>
+        <Scene />
+      </Suspense>
+    </div>
   );
 };

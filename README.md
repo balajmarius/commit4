@@ -1,24 +1,34 @@
-# COMMIT 4 🎮
-> digital LCD mini-game
+# COMMIT 4
 
-![commit4](https://i.imgur.com/tIruBpP.png)
+Digital LCD mini-game.
 
-# ✨ Winner of ["Best theme interpretation"](https://github.com/blog/2483-game-off-2017-winners)
+### Setup
 
-### Lint 🎩
-
-```bash
-npm run lint
-```
-
-### Start 🏁
+Use Node.js 20.19+ or 22.12+ (see `engines` in `package.json`).
 
 ```bash
-npm run start
+npm install
 ```
 
-### Build 📦
+### Development
+
+```bash
+npm start
+```
+
+Vite serves the app at http://localhost:5173. `npm run dev` is an alias.
+
+### Code style
+
+```bash
+npm run check
+npm run lint:fix
+npm run format
+```
+
+### Production
 
 ```bash
 npm run build
+npm run preview
 ```

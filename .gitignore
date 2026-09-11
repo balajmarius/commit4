@@ -1,6 +1,5 @@
-.fusebox
-static/build
-static/build/*.js
-static/build/*.map
-node_modules
+node_modules/
+dist/
 .env
+.env.*
+!.env.example

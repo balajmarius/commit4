@@ -1,1 +1,5 @@
 @import "tailwindcss";
+
+@theme {
+  --background-image-screen: url("../images/bg-2@2x.png");
+}

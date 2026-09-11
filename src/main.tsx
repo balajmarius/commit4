@@ -9,8 +9,7 @@ console.log(`
     \\ <_. )   For Adi,
      \`---'
 
-  You gave me the passion for making retro games.
-  You will never be forgotten.
+  Every time I make a game, I’ll think of you.
 `);
 
 const mount = document.getElementById("root");
