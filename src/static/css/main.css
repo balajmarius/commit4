@@ -3,4 +3,5 @@
 @theme {
   --background-image-case: url("../images/bg-1@2x.png");
   --background-image-screen: url("../images/bg-2@2x.png");
+  --background-image-button: url("../images/bg-3@2x.png");
 }
