@@ -8,7 +8,7 @@ import { SPRITE_ALPHA_ACTIVE, SPRITE_ALPHA_DISABLED } from "@/utils/const";
 
 extend({ Container, Sprite });
 
-const COMMIT_LANES = [
+const BULLET_LANES = [
   {
     x: 0,
     y: 0,
@@ -51,14 +51,14 @@ const COMMIT_LANES = [
   },
 ] as const;
 
-const COMMIT_X = 37;
-const COMMIT_Y = 42;
+const BULLET_X = 37;
+const BULLET_Y = 42;
 
-export const Commit = () => {
-  const atlas = useAtlas();
+export const Bullets = () => {
   const { bullets } = useGame();
+  const { textures } = useAtlas();
 
-  const getAlpha = (lane: number, cell: number) => {
+  const alpha = (lane: number, cell: number) => {
     if (bullets[lane] === cell) {
       return SPRITE_ALPHA_ACTIVE;
     }
@@ -66,8 +66,8 @@ export const Commit = () => {
   };
 
   return (
-    <pixiContainer x={COMMIT_X} y={COMMIT_Y}>
-      {COMMIT_LANES.map((lane, laneIndex) => {
+    <pixiContainer x={BULLET_X} y={BULLET_Y}>
+      {BULLET_LANES.map((lane, laneIndex) => {
         return (
           <pixiContainer key={lane.x} x={lane.x} y={lane.y}>
             {lane.cells.map((cell, cellIndex) => {
@@ -76,8 +76,8 @@ export const Commit = () => {
                   key={`${cell.x}-${cell.y}`}
                   x={cell.x}
                   y={cell.y}
-                  texture={atlas.textures.commit}
-                  alpha={getAlpha(laneIndex, cellIndex)}
+                  texture={textures.bullet}
+                  alpha={alpha(laneIndex, cellIndex)}
                 />
               );
             })}

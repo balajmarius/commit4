@@ -4,50 +4,35 @@ import { union } from "es-toolkit";
 import { ACTOR_LANES, ACTOR_CELL_IDLE, ACTOR_CELL_OFFSET, ACTOR_CELL_LAST } from "@/utils/const";
 
 export const useBullets = () => {
-  const pending = useRef<readonly number[]>([]);
-  const hits = useRef<readonly number[]>([]);
+  const pending = useRef<number[]>([]);
 
-  const [cells, setCells] = useState(() => {
+  const [cells, setCells] = useState<number[]>(() => {
     return Array.from(ACTOR_LANES).fill(ACTOR_CELL_IDLE);
   });
 
-  const fire = (lane: number) => {
+  const spawn = (lane: number) => {
     if (cells[lane] === ACTOR_CELL_IDLE) {
       pending.current = union(pending.current, [lane]);
     }
   };
 
-  const step = (bugs: number[]) => {
-    const next = cells.map((cell, lane) => {
-      if (hits.current.includes(lane)) {
-        return ACTOR_CELL_IDLE;
-      }
-      if (pending.current.includes(lane)) {
-        return ACTOR_CELL_LAST;
-      }
-      return Math.max(ACTOR_CELL_IDLE, cell - ACTOR_CELL_OFFSET);
-    });
-
+  const step = () => {
+    // Keep this tick's shots:
+    // React may run the state updater later.
+    const queued = pending.current;
+    // Accept new shots for the next tick
+    // without changing the captured list.
     pending.current = [];
 
-    hits.current = ACTOR_LANES.filter((lane) => {
-      if (next[lane] === ACTOR_CELL_IDLE || bugs[lane] === ACTOR_CELL_IDLE) {
-        return false;
-      }
-      return bugs[lane] === next[lane] || bugs[lane] === next[lane] + ACTOR_CELL_OFFSET;
-    });
-
-    setCells(
-      next.map((cell, lane) => {
-        if (hits.current.includes(lane)) {
-          return bugs[lane];
+    setCells((current) => {
+      return current.map((cell, lane) => {
+        if (cell === ACTOR_CELL_IDLE && queued.includes(lane)) {
+          return ACTOR_CELL_LAST;
         }
-        return cell;
-      }),
-    );
-
-    return hits.current;
+        return Math.max(ACTOR_CELL_IDLE, cell - ACTOR_CELL_OFFSET);
+      });
+    });
   };
 
-  return { cells, fire, step };
+  return { cells, spawn, step };
 };

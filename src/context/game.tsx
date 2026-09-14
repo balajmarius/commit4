@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useRef, useEffect, type ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
 
 import { isNil } from "es-toolkit";
 import { useCounter, useEventListener } from "usehooks-ts";
@@ -7,12 +7,13 @@ import { useSfx } from "@/hooks/useSfx";
 import { useBugs } from "@/hooks/useBugs";
 import { useBullets } from "@/hooks/useBullets";
 
+import { ACTOR_LANES, ACTOR_CELL_IDLE } from "@/utils/const";
+
 type GameState = "stop" | "play" | "dead";
 
 type GameValue = {
   bugs: number[];
   bullets: number[];
-  explosions: number[];
   lane: number;
   score: number;
   status: GameState;
@@ -38,10 +39,6 @@ export const GameProvider = ({ children }: GameProviderProps) => {
 
   const bugs = useBugs();
   const bullets = useBullets();
-  const game = useRef({ bugs, bullets, sfx, score });
-
-  const interval = useRef<ReturnType<typeof setInterval> | null>(null);
-  const bulletInterval = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const [lane, setLane] = useState(OCTO_LANE_FIRST);
   const [status, setStatus] = useState<GameState>("stop");
@@ -61,9 +58,6 @@ export const GameProvider = ({ children }: GameProviderProps) => {
       }
       sfx.play("game/keyPress");
     }
-    if (event.code === "Space" && status !== "dead") {
-      bullets.fire(lane);
-    }
 
     // Move the octo one lane to the left.
     // Stay on the first lane if there is no further cell.
@@ -79,10 +73,10 @@ export const GameProvider = ({ children }: GameProviderProps) => {
         return Math.min(OCTO_LANE_LAST, current + OCTO_LANE_OFFSET);
       });
     }
-  });
 
-  useEffect(() => {
-    game.current = { bugs, bullets, sfx, score };
+    if (event.code === "Space") {
+      bullets.spawn(lane);
+    }
   });
 
   useEffect(() => {
@@ -90,34 +84,18 @@ export const GameProvider = ({ children }: GameProviderProps) => {
       return;
     }
 
-    // Play immediate tick sounds
-    game.current.sfx.play("game/tick");
-
-    interval.current = setInterval(() => {
-      game.current.bugs.step();
-      game.current.sfx.play("game/tick");
+    const bugsInterval = setInterval(() => {
+      bugs.step();
+      sfx.play("game/tick");
     }, BUGS_TICK_MS);
 
-    bulletInterval.current = setInterval(() => {
-      const { bugs, bullets, sfx, score } = game.current;
-      const hits = bullets.step(bugs.cells);
-
-      hits.forEach((lane) => {
-        bugs.remove(lane);
-        score.increment();
-        sfx.play("bug/hit");
-      });
+    const bulletsInterval = setInterval(() => {
+      bullets.step();
     }, BULLET_TICK_MS);
 
     return () => {
-      if (interval.current !== null) {
-        clearInterval(interval.current);
-        interval.current = null;
-      }
-      if (bulletInterval.current !== null) {
-        clearInterval(bulletInterval.current);
-        bulletInterval.current = null;
-      }
+      clearInterval(bugsInterval);
+      clearInterval(bulletsInterval);
     };
   }, [status]);
 
@@ -129,7 +107,6 @@ export const GameProvider = ({ children }: GameProviderProps) => {
         score: score.count,
         bugs: bugs.cells,
         bullets: bullets.cells,
-        explosions: bugs.explosions,
       }}
     >
       {children}

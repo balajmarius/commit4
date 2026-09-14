@@ -5,8 +5,8 @@ import { useAtlas } from "@/hooks/useAtlas";
 
 import { GameProvider } from "@/context/game";
 
-import { Bug } from "@/components/bug";
-import { Commit } from "@/components/commit";
+import { Bugs } from "@/components/bugs";
+import { Bullets } from "@/components/bullets";
 import { Octo } from "@/components/octo";
 import { Score } from "@/components/score";
 
@@ -24,8 +24,8 @@ export const Scene = () => {
     <Application width={SCENE_WIDTH} height={SCENE_HEIGHT}>
       <GameProvider>
         <pixiSprite texture={atlas.textures.environment} />
-        <Bug />
-        <Commit />
+        <Bugs />
+        <Bullets />
         <Octo />
         <Score />
       </GameProvider>
