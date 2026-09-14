@@ -5,3 +5,5 @@ export const ACTOR_LANES = [0, 1, 2, 3];
 export const ACTOR_CELL_IDLE = -1;
 export const ACTOR_CELL_OFFSET = 1;
 export const ACTOR_CELL_LAST = 3;
+
+export const BUG_EXPLOSION_MS = 500;

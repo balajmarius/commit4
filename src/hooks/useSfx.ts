@@ -6,8 +6,8 @@ import tick from "@/static/sounds/tick.mp3?url";
 import keyPress from "@/static/sounds/keyPress.mp3?url";
 
 const SFX = {
-  "bug/die": new Howl({ src: [die] }),
-  "octo/hit": new Howl({ src: [hit] }),
+  "bug/hit": new Howl({ src: [hit] }),
+  "octo/die": new Howl({ src: [die] }),
   "game/tick": new Howl({ src: [tick] }),
   "game/keyPress": new Howl({ src: [keyPress] }),
 } as const;

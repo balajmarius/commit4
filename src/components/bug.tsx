@@ -53,7 +53,14 @@ const BUG_LANES = [
 
 export const Bug = () => {
   const atlas = useAtlas();
-  const { bugs } = useGame();
+  const { bugs, explosions } = useGame();
+
+  const getAlpha = (position: number, cell: number) => {
+    if (position === cell) {
+      return SPRITE_ALPHA_ACTIVE;
+    }
+    return SPRITE_ALPHA_DISABLED;
+  };
 
   return (
     <pixiContainer>
@@ -63,12 +70,13 @@ export const Bug = () => {
             {lane.cells.map((cell, cellIndex) => {
               return (
                 <pixiContainer key={cell.body} x={cell.x} y={cell.y}>
-                  <pixiSprite texture={atlas.textures[cell.squash]} alpha={SPRITE_ALPHA_DISABLED} />
+                  <pixiSprite
+                    texture={atlas.textures[cell.squash]}
+                    alpha={getAlpha(explosions[laneIndex], cellIndex)}
+                  />
                   <pixiSprite
                     texture={atlas.textures[cell.body]}
-                    alpha={
-                      bugs[laneIndex] === cellIndex ? SPRITE_ALPHA_ACTIVE : SPRITE_ALPHA_DISABLED
-                    }
+                    alpha={getAlpha(Math.max(bugs[laneIndex], explosions[laneIndex]), cellIndex)}
                   />
                 </pixiContainer>
               );

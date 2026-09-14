@@ -10,9 +10,9 @@ import { useBullets } from "@/hooks/useBullets";
 type GameState = "stop" | "play" | "dead";
 
 type GameValue = {
-  blast: number | null;
   bugs: number[];
   bullets: number[];
+  explosions: number[];
   lane: number;
   score: number;
   status: GameState;
@@ -26,7 +26,8 @@ const OCTO_LANE_FIRST = 0;
 const OCTO_LANE_LAST = 3;
 const OCTO_LANE_OFFSET = 1;
 
-const GAME_TICK_MS = 500;
+const BUGS_TICK_MS = 500;
+const BULLET_TICK_MS = 300;
 const GAME_CONTROL_KEYS = ["Space", "ArrowLeft", "ArrowRight"];
 
 const GameContext = createContext<GameValue | null>(null);
@@ -37,8 +38,10 @@ export const GameProvider = ({ children }: GameProviderProps) => {
 
   const bugs = useBugs();
   const bullets = useBullets();
+  const game = useRef({ bugs, bullets, sfx, score });
 
   const interval = useRef<ReturnType<typeof setInterval> | null>(null);
+  const bulletInterval = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const [lane, setLane] = useState(OCTO_LANE_FIRST);
   const [status, setStatus] = useState<GameState>("stop");
@@ -79,33 +82,54 @@ export const GameProvider = ({ children }: GameProviderProps) => {
   });
 
   useEffect(() => {
+    game.current = { bugs, bullets, sfx, score };
+  });
+
+  useEffect(() => {
     if (status !== "play") {
       return;
     }
 
     // Play immediate tick sounds
-    sfx.play("game/tick");
+    game.current.sfx.play("game/tick");
 
     interval.current = setInterval(() => {
-      // Move bullets, then spawn or move bugs.
-      bugs.step();
-      bullets.step();
-      // Play tick sound every game tick.
-      sfx.play("game/tick");
-    }, GAME_TICK_MS);
+      game.current.bugs.step();
+      game.current.sfx.play("game/tick");
+    }, BUGS_TICK_MS);
 
-    return () => clearInterval(interval.current as NodeJS.Timeout);
+    bulletInterval.current = setInterval(() => {
+      const { bugs, bullets, sfx, score } = game.current;
+      const hits = bullets.step(bugs.cells);
+
+      hits.forEach((lane) => {
+        bugs.remove(lane);
+        score.increment();
+        sfx.play("bug/hit");
+      });
+    }, BULLET_TICK_MS);
+
+    return () => {
+      if (interval.current !== null) {
+        clearInterval(interval.current);
+        interval.current = null;
+      }
+      if (bulletInterval.current !== null) {
+        clearInterval(bulletInterval.current);
+        bulletInterval.current = null;
+      }
+    };
   }, [status]);
 
   return (
     <GameContext.Provider
       value={{
-        blast: null,
-        bugs: bugs.cells,
-        bullets: bullets.cells,
         lane,
         status,
         score: score.count,
+        bugs: bugs.cells,
+        bullets: bullets.cells,
+        explosions: bugs.explosions,
       }}
     >
       {children}
