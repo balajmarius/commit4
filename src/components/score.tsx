@@ -4,7 +4,7 @@ import { Container, Sprite } from "pixi.js";
 import { useGame } from "@/context/game";
 import { useAtlas } from "@/hooks/useAtlas";
 
-import { SPRITE_ALPHA_ACTIVE } from "@/utils/const";
+import { SPRITE_ALPHA_ACTIVE, SPRITE_ALPHA_DISABLED } from "@/utils/const";
 
 extend({ Container, Sprite });
 
@@ -27,8 +27,8 @@ const SCORE_FRAMES = [
 ] as const;
 
 export const Score = () => {
-  const { score } = useGame();
   const { textures } = useAtlas();
+  const { score, gameState } = useGame();
 
   const digits = [...String(score)];
 
@@ -43,7 +43,7 @@ export const Score = () => {
             key={`${digit}-${index}`}
             x={(index - digits.length) * SCORE_ADVANCE + offset}
             texture={texture}
-            alpha={SPRITE_ALPHA_ACTIVE}
+            alpha={gameState === "on" ? SPRITE_ALPHA_ACTIVE : SPRITE_ALPHA_DISABLED}
           />
         );
       })}

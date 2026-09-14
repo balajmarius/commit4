@@ -1282,80 +1282,17 @@
     }
   },
   "animations": {
-    "bug/0": [
-      "bug/0/0",
-      "bug/0/1",
-      "bug/0/2",
-      "bug/0/3",
-      "bug/0/4"
-    ],
-    "squash/0": [
-      "squash/0/0",
-      "squash/0/1",
-      "squash/0/2",
-      "squash/0/3",
-      "squash/0/4"
-    ],
-    "bug/1": [
-      "bug/1/0",
-      "bug/1/1",
-      "bug/1/2",
-      "bug/1/3",
-      "bug/1/4"
-    ],
-    "squash/1": [
-      "squash/1/0",
-      "squash/1/1",
-      "squash/1/2",
-      "squash/1/3",
-      "squash/1/4"
-    ],
-    "bug/2": [
-      "bug/2/0",
-      "bug/2/1",
-      "bug/2/2",
-      "bug/2/3",
-      "bug/2/4"
-    ],
-    "squash/2": [
-      "squash/2/0",
-      "squash/2/1",
-      "squash/2/2",
-      "squash/2/3",
-      "squash/2/4"
-    ],
-    "bug/3": [
-      "bug/3/0",
-      "bug/3/1",
-      "bug/3/2",
-      "bug/3/3",
-      "bug/3/4"
-    ],
-    "octo/blast": [
-      "octo/blast/0",
-      "octo/blast/1",
-      "octo/blast/2",
-      "octo/blast/3"
-    ],
-    "octo/tentacles": [
-      "octo/tentacles/0",
-      "octo/tentacles/1",
-      "octo/tentacles/2",
-      "octo/tentacles/3"
-    ],
-    "octo/body": [
-      "octo/body/0",
-      "octo/body/1",
-      "octo/body/2",
-      "octo/body/3"
-    ],
-    "squash/3": [
-      "squash/3/0",
-      "squash/3/1",
-      "squash/3/2",
-      "squash/3/3",
-      "squash/3/4"
-    ],
+    "bug/0": ["bug/0/0", "bug/0/1", "bug/0/2", "bug/0/3", "bug/0/4"],
+    "squash/0": ["squash/0/0", "squash/0/1", "squash/0/2", "squash/0/3", "squash/0/4"],
+    "bug/1": ["bug/1/0", "bug/1/1", "bug/1/2", "bug/1/3", "bug/1/4"],
+    "squash/1": ["squash/1/0", "squash/1/1", "squash/1/2", "squash/1/3", "squash/1/4"],
+    "bug/2": ["bug/2/0", "bug/2/1", "bug/2/2", "bug/2/3", "bug/2/4"],
+    "squash/2": ["squash/2/0", "squash/2/1", "squash/2/2", "squash/2/3", "squash/2/4"],
+    "bug/3": ["bug/3/0", "bug/3/1", "bug/3/2", "bug/3/3", "bug/3/4"],
+    "octo/blast": ["octo/blast/0", "octo/blast/1", "octo/blast/2", "octo/blast/3"],
+    "octo/tentacles": ["octo/tentacles/0", "octo/tentacles/1", "octo/tentacles/2", "octo/tentacles/3"],
+    "octo/body": ["octo/body/0", "octo/body/1", "octo/body/2", "octo/body/3"],
+    "squash/3": ["squash/3/0", "squash/3/1", "squash/3/2", "squash/3/3", "squash/3/4"],
     "score": [
       "score/0",
       "score/1",

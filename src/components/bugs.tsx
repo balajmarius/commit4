@@ -62,22 +62,17 @@ export const Bugs = () => {
           <pixiContainer key={`${lane.x}-${lane.y}`} x={lane.x} y={lane.y}>
             {lane.cells.map((cell, cellIndex) => {
               const isActive = lanes[laneIndex].bug === cellIndex;
-              const isCollision =
-                lanes[laneIndex].collision?.cell === cellIndex;
+              const isCollision = lanes[laneIndex].collision?.cell === cellIndex;
 
               return (
                 <pixiContainer key={cell.body} x={cell.x} y={cell.y}>
                   <pixiSprite
                     texture={textures[cell.squash]}
-                    alpha={
-                      isCollision ? SPRITE_ALPHA_ACTIVE : SPRITE_ALPHA_DISABLED
-                    }
+                    alpha={isCollision ? SPRITE_ALPHA_ACTIVE : SPRITE_ALPHA_DISABLED}
                   />
                   <pixiSprite
                     texture={textures[cell.body]}
-                    alpha={
-                      isActive ? SPRITE_ALPHA_ACTIVE : SPRITE_ALPHA_DISABLED
-                    }
+                    alpha={isActive ? SPRITE_ALPHA_ACTIVE : SPRITE_ALPHA_DISABLED}
                   />
                 </pixiContainer>
               );

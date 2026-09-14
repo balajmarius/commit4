@@ -4,11 +4,7 @@ import { Container, Sprite } from "pixi.js";
 import { useGame } from "@/context/game";
 import { useAtlas } from "@/hooks/useAtlas";
 
-import {
-  ACTOR_CELL_LAST,
-  SPRITE_ALPHA_ACTIVE,
-  SPRITE_ALPHA_DISABLED,
-} from "@/utils/const";
+import { ACTOR_CELL_LAST, SPRITE_ALPHA_ACTIVE, SPRITE_ALPHA_DISABLED } from "@/utils/const";
 
 extend({ Container, Sprite });
 
@@ -53,7 +49,7 @@ const OCTO_LANES = [
 
 export const Octo = () => {
   const { textures } = useAtlas();
-  const { lane, lanes, fireLane } = useGame();
+  const { lane, lanes, fireLane, gameState } = useGame();
 
   const blast = lanes.findIndex((actor) => {
     return actor.bug > ACTOR_CELL_LAST;
@@ -62,7 +58,7 @@ export const Octo = () => {
   return (
     <pixiContainer>
       {OCTO_LANES.map((cell, index) => {
-        const isActive = index === lane;
+        const isActive = index === lane && gameState === "on";
 
         return (
           <pixiContainer key={cell.body} x={cell.x} y={cell.y}>
@@ -70,15 +66,11 @@ export const Octo = () => {
               texture={textures[cell.blast]}
               x={cell.blastX}
               y={cell.blastY}
-              alpha={
-                index === blast ? SPRITE_ALPHA_ACTIVE : SPRITE_ALPHA_DISABLED
-              }
+              alpha={index === blast ? SPRITE_ALPHA_ACTIVE : SPRITE_ALPHA_DISABLED}
             />
             <pixiSprite
               texture={textures[cell.tentacles]}
-              alpha={
-                index === fireLane ? SPRITE_ALPHA_ACTIVE : SPRITE_ALPHA_DISABLED
-              }
+              alpha={index === fireLane ? SPRITE_ALPHA_ACTIVE : SPRITE_ALPHA_DISABLED}
             />
             <pixiSprite
               texture={textures[cell.body]}
