@@ -1,22 +1,34 @@
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
-
-import { isNil } from "es-toolkit";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  type ReactNode,
+} from "react";
 import { useCounter, useEventListener } from "usehooks-ts";
+import { isNil, isNotNil, randomInt } from "es-toolkit";
+
+import {
+  ACTOR_CELL_IDLE,
+  ACTOR_CELL_OFFSET,
+  ACTOR_CELL_LAST,
+} from "@/utils/const";
 
 import { useSfx } from "@/hooks/useSfx";
-import { useBugs } from "@/hooks/useBugs";
-import { useBullets } from "@/hooks/useBullets";
-
-import { ACTOR_LANES, ACTOR_CELL_IDLE } from "@/utils/const";
 
 type GameState = "stop" | "play" | "dead";
 
+type LaneState = {
+  bug: number;
+  bullet: number;
+  collision: number | null;
+};
+
 type GameValue = {
-  bugs: number[];
-  bullets: number[];
   lane: number;
+  lanes: LaneState[];
   score: number;
-  status: GameState;
 };
 
 type GameProviderProps = {
@@ -27,8 +39,9 @@ const OCTO_LANE_FIRST = 0;
 const OCTO_LANE_LAST = 3;
 const OCTO_LANE_OFFSET = 1;
 
-const BUGS_TICK_MS = 500;
-const BULLET_TICK_MS = 300;
+const BUG_TICK_MS = 500;
+const BULLET_TICK_MS = 200;
+
 const GAME_CONTROL_KEYS = ["Space", "ArrowLeft", "ArrowRight"];
 
 const GameContext = createContext<GameValue | null>(null);
@@ -37,11 +50,57 @@ export const GameProvider = ({ children }: GameProviderProps) => {
   const sfx = useSfx();
   const score = useCounter();
 
-  const bugs = useBugs();
-  const bullets = useBullets();
+  const [lanes, setLanes] = useState<LaneState[]>([
+    { bug: ACTOR_CELL_IDLE, bullet: ACTOR_CELL_IDLE, collision: null },
+    { bug: ACTOR_CELL_IDLE, bullet: ACTOR_CELL_IDLE, collision: null },
+    { bug: ACTOR_CELL_IDLE, bullet: ACTOR_CELL_IDLE, collision: null },
+    { bug: ACTOR_CELL_IDLE, bullet: ACTOR_CELL_IDLE, collision: null },
+  ]);
 
   const [lane, setLane] = useState(OCTO_LANE_FIRST);
-  const [status, setStatus] = useState<GameState>("stop");
+
+  const handleBugs = useCallback(() => {
+    const lane = randomInt(lanes.length);
+
+    setLanes((current) => {
+      return current.map((actor, index) => {
+        if (isNotNil(actor.collision)) {
+          return { bug: ACTOR_CELL_IDLE, bullet: ACTOR_CELL_IDLE, collision: null };
+        }
+        if (index === lane) {
+          return { ...actor, bug: actor.bug + ACTOR_CELL_OFFSET };
+        }
+        return actor;
+      });
+    });
+  }, [lanes.length]);
+
+  const handleBullets = useCallback(() => {
+    setLanes((current) => {
+      return current.map((actor) => {
+        if (actor.bullet === ACTOR_CELL_IDLE) {
+          return actor;
+        }
+        // Remove the bullet
+        // when it hits the bug.
+        if (actor.bullet === actor.bug) {
+          return { ...actor, bullet: ACTOR_CELL_IDLE, collision: actor.bullet };
+        }
+        return { ...actor, bullet: actor.bullet - ACTOR_CELL_OFFSET };
+      });
+    });
+  }, []);
+
+  const handleFire = () => {
+    setLanes((current) => {
+      return current.map((actor, index) => {
+        if (index === lane && actor.bullet === ACTOR_CELL_IDLE) {
+          return { ...actor, bullet: ACTOR_CELL_LAST };
+        }
+        return actor;
+      });
+    });
+  };
 
   useEventListener("keydown", (event) => {
     event.preventDefault();
@@ -53,10 +112,11 @@ export const GameProvider = ({ children }: GameProviderProps) => {
     // Handheld click for every game key.
     // Space, left, and right share this press sound.
     if (GAME_CONTROL_KEYS.includes(event.code)) {
-      if (status === "stop") {
-        setStatus("play");
-      }
       sfx.play("game/keyPress");
+    }
+
+    if (event.code === "Space") {
+      handleFire();
     }
 
     // Move the octo one lane to the left.
@@ -73,40 +133,24 @@ export const GameProvider = ({ children }: GameProviderProps) => {
         return Math.min(OCTO_LANE_LAST, current + OCTO_LANE_OFFSET);
       });
     }
-
-    if (event.code === "Space") {
-      bullets.spawn(lane);
-    }
   });
 
   useEffect(() => {
-    if (status !== "play") {
-      return;
-    }
-
-    const bugsInterval = setInterval(() => {
-      bugs.step();
-      sfx.play("game/tick");
-    }, BUGS_TICK_MS);
-
-    const bulletsInterval = setInterval(() => {
-      bullets.step();
-    }, BULLET_TICK_MS);
+    const bugs = setInterval(handleBugs, BUG_TICK_MS);
+    const bullets = setInterval(handleBullets, BULLET_TICK_MS);
 
     return () => {
-      clearInterval(bugsInterval);
-      clearInterval(bulletsInterval);
+      clearInterval(bugs);
+      clearInterval(bullets);
     };
-  }, [status]);
+  }, [handleBugs, handleBullets]);
 
   return (
     <GameContext.Provider
       value={{
         lane,
-        status,
+        lanes,
         score: score.count,
-        bugs: bugs.cells,
-        bullets: bullets.cells,
       }}
     >
       {children}

@@ -14,10 +14,10 @@ const SFX = {
 
 export type Sfx = keyof typeof SFX;
 
-export const useSfx = () => {
-  const play = (sfx: Sfx) => {
-    SFX[sfx].play();
-  };
+const play = (sfx: Sfx) => {
+  SFX[sfx].play();
+};
 
+export const useSfx = () => {
   return { play };
 };

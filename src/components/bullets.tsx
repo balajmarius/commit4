@@ -55,15 +55,8 @@ const BULLET_X = 37;
 const BULLET_Y = 42;
 
 export const Bullets = () => {
-  const { bullets } = useGame();
+  const { lanes } = useGame();
   const { textures } = useAtlas();
-
-  const alpha = (lane: number, cell: number) => {
-    if (bullets[lane] === cell) {
-      return SPRITE_ALPHA_ACTIVE;
-    }
-    return SPRITE_ALPHA_DISABLED;
-  };
 
   return (
     <pixiContainer x={BULLET_X} y={BULLET_Y}>
@@ -77,7 +70,11 @@ export const Bullets = () => {
                   x={cell.x}
                   y={cell.y}
                   texture={textures.bullet}
-                  alpha={alpha(laneIndex, cellIndex)}
+                  alpha={
+                    lanes[laneIndex].bullet === cellIndex
+                      ? SPRITE_ALPHA_ACTIVE
+                      : SPRITE_ALPHA_DISABLED
+                  }
                 />
               );
             })}
