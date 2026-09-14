@@ -1,0 +1,16 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "semi": true,
+  "singleQuote": false,
+  "jsxSingleQuote": false,
+  "tabWidth": 2,
+  "useTabs": false,
+  "printWidth": 110,
+  "trailingComma": "all",
+  "arrowParens": "always",
+  "endOfLine": "lf",
+  "sortTailwindcss": {
+    "stylesheet": "./src/static/css/main.css"
+  },
+  "ignorePatterns": ["dist/**", "static/build/**", "package-lock.json"]
+}

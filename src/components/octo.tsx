@@ -1,0 +1,84 @@
+import { extend } from "@pixi/react";
+import { Container, Sprite } from "pixi.js";
+
+import { useGame } from "@/context/game";
+import { useAtlas } from "@/hooks/useAtlas";
+
+import { ACTOR_CELL_LAST, SPRITE_ALPHA_ACTIVE, SPRITE_ALPHA_DISABLED } from "@/utils/const";
+
+extend({ Container, Sprite });
+
+const OCTO_LANES = [
+  {
+    x: 62,
+    y: 247,
+    body: "octo/body/0",
+    tentacles: "octo/tentacles/0",
+    blast: "octo/blast/0",
+    blastX: -1,
+    blastY: -37,
+  },
+  {
+    x: 162,
+    y: 247,
+    body: "octo/body/1",
+    tentacles: "octo/tentacles/1",
+    blast: "octo/blast/1",
+    blastX: -23,
+    blastY: -30,
+  },
+  {
+    x: 242,
+    y: 247,
+    body: "octo/body/2",
+    tentacles: "octo/tentacles/2",
+    blast: "octo/blast/2",
+    blastX: -26,
+    blastY: -36,
+  },
+  {
+    x: 300,
+    y: 247,
+    body: "octo/body/3",
+    tentacles: "octo/tentacles/3",
+    blast: "octo/blast/3",
+    blastX: 1,
+    blastY: -31,
+  },
+] as const;
+
+export const Octo = () => {
+  const { textures } = useAtlas();
+  const { lane, lanes, fireLane, gameState } = useGame();
+
+  const blast = lanes.findIndex((actor) => {
+    return actor.bug > ACTOR_CELL_LAST;
+  });
+
+  return (
+    <pixiContainer>
+      {OCTO_LANES.map((cell, index) => {
+        const isActive = index === lane && gameState === "on";
+
+        return (
+          <pixiContainer key={cell.body} x={cell.x} y={cell.y}>
+            <pixiSprite
+              texture={textures[cell.blast]}
+              x={cell.blastX}
+              y={cell.blastY}
+              alpha={index === blast ? SPRITE_ALPHA_ACTIVE : SPRITE_ALPHA_DISABLED}
+            />
+            <pixiSprite
+              texture={textures[cell.tentacles]}
+              alpha={index === fireLane ? SPRITE_ALPHA_ACTIVE : SPRITE_ALPHA_DISABLED}
+            />
+            <pixiSprite
+              texture={textures[cell.body]}
+              alpha={isActive ? SPRITE_ALPHA_ACTIVE : SPRITE_ALPHA_DISABLED}
+            />
+          </pixiContainer>
+        );
+      })}
+    </pixiContainer>
+  );
+};
