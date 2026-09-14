@@ -6,7 +6,7 @@ Winner of **Best Theme Interpretation** at [GitHub Game Off 2017](https://github
 
 [Play COMMIT4](https://commit4.balajmarius.com/)
 
-<img src="docs/images/commit4.png" alt="COMMIT4 handheld LCD game with an Octocat defending four lanes from incoming bugs" width="480" />
+<img src="docs/images/commit4-preview.png" alt="COMMIT4 handheld LCD game with an Octocat defending four lanes from incoming bugs" width="480" />
 
 ## Controls
 
