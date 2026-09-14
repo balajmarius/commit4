@@ -28,14 +28,14 @@ const SCORE_FRAMES = [
 
 export const Score = () => {
   const { score } = useGame();
+  const { textures } = useAtlas();
 
-  const atlas = useAtlas();
   const digits = [...String(score)];
 
   return (
     <pixiContainer x={SCORE_X} y={SCORE_Y}>
       {digits.map((digit, index) => {
-        const texture = atlas.textures[SCORE_FRAMES[Number(digit)]];
+        const texture = textures[SCORE_FRAMES[Number(digit)]];
         const offset = SCORE_DIGIT_WIDTH - texture.width;
 
         return (

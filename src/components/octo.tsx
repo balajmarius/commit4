@@ -4,7 +4,11 @@ import { Container, Sprite } from "pixi.js";
 import { useGame } from "@/context/game";
 import { useAtlas } from "@/hooks/useAtlas";
 
-import { ACTOR_CELL_LAST, SPRITE_ALPHA_ACTIVE, SPRITE_ALPHA_DISABLED } from "@/utils/const";
+import {
+  ACTOR_CELL_LAST,
+  SPRITE_ALPHA_ACTIVE,
+  SPRITE_ALPHA_DISABLED,
+} from "@/utils/const";
 
 extend({ Container, Sprite });
 
@@ -55,13 +59,6 @@ export const Octo = () => {
     return actor.bug > ACTOR_CELL_LAST;
   });
 
-  const tentaclesAlpha = (index: number) => {
-    if (index === fireLane) {
-      return SPRITE_ALPHA_ACTIVE;
-    }
-    return SPRITE_ALPHA_DISABLED;
-  };
-
   return (
     <pixiContainer>
       {OCTO_LANES.map((cell, index) => {
@@ -73,11 +70,15 @@ export const Octo = () => {
               texture={textures[cell.blast]}
               x={cell.blastX}
               y={cell.blastY}
-              alpha={index === blast ? SPRITE_ALPHA_ACTIVE : SPRITE_ALPHA_DISABLED}
+              alpha={
+                index === blast ? SPRITE_ALPHA_ACTIVE : SPRITE_ALPHA_DISABLED
+              }
             />
             <pixiSprite
               texture={textures[cell.tentacles]}
-              alpha={tentaclesAlpha(index)}
+              alpha={
+                index === fireLane ? SPRITE_ALPHA_ACTIVE : SPRITE_ALPHA_DISABLED
+              }
             />
             <pixiSprite
               texture={textures[cell.body]}
