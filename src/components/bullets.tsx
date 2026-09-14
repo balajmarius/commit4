@@ -64,17 +64,15 @@ export const Bullets = () => {
         return (
           <pixiContainer key={lane.x} x={lane.x} y={lane.y}>
             {lane.cells.map((cell, cellIndex) => {
+              const isActive = lanes[laneIndex].bullet === cellIndex;
+
               return (
                 <pixiSprite
                   key={`${cell.x}-${cell.y}`}
                   x={cell.x}
                   y={cell.y}
                   texture={textures.bullet}
-                  alpha={
-                    lanes[laneIndex].bullet === cellIndex
-                      ? SPRITE_ALPHA_ACTIVE
-                      : SPRITE_ALPHA_DISABLED
-                  }
+                  alpha={isActive ? SPRITE_ALPHA_ACTIVE : SPRITE_ALPHA_DISABLED}
                 />
               );
             })}

@@ -48,25 +48,29 @@ const OCTO_LANES = [
 ] as const;
 
 export const Octo = () => {
-  const atlas = useAtlas();
-
-  const { blast, lane } = useGame();
+  const { lane } = useGame();
+  const { textures } = useAtlas();
 
   return (
     <pixiContainer>
       {OCTO_LANES.map((cell, index) => {
+        const isActive = index === lane;
+
         return (
           <pixiContainer key={cell.body} x={cell.x} y={cell.y}>
             <pixiSprite
-              texture={atlas.textures[cell.blast]}
+              texture={textures[cell.blast]}
               x={cell.blastX}
               y={cell.blastY}
-              alpha={index === blast ? SPRITE_ALPHA_ACTIVE : SPRITE_ALPHA_DISABLED}
+              alpha={SPRITE_ALPHA_DISABLED}
             />
-            <pixiSprite texture={atlas.textures[cell.tentacles]} alpha={SPRITE_ALPHA_DISABLED} />
             <pixiSprite
-              texture={atlas.textures[cell.body]}
-              alpha={index === lane ? SPRITE_ALPHA_ACTIVE : SPRITE_ALPHA_DISABLED}
+              texture={textures[cell.tentacles]}
+              alpha={SPRITE_ALPHA_DISABLED}
+            />
+            <pixiSprite
+              texture={textures[cell.body]}
+              alpha={isActive ? SPRITE_ALPHA_ACTIVE : SPRITE_ALPHA_DISABLED}
             />
           </pixiContainer>
         );

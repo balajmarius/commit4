@@ -2,27 +2,27 @@ import {
   createContext,
   useContext,
   useState,
+  useRef,
   useEffect,
   useCallback,
   type ReactNode,
 } from "react";
 import { useCounter, useEventListener } from "usehooks-ts";
-import { isNil, isNotNil, randomInt } from "es-toolkit";
+import { isNil, isNotNil, negate, randomInt } from "es-toolkit";
 
 import {
   ACTOR_CELL_IDLE,
   ACTOR_CELL_OFFSET,
   ACTOR_CELL_LAST,
+  BUG_EXPLOSION_MS,
 } from "@/utils/const";
 
 import { useSfx } from "@/hooks/useSfx";
 
-type GameState = "stop" | "play" | "dead";
-
 type LaneState = {
   bug: number;
   bullet: number;
-  collision: number | null;
+  collision: { cell: number; startedAt: number } | null;
 };
 
 type GameValue = {
@@ -38,17 +38,20 @@ type GameProviderProps = {
 const OCTO_LANE_FIRST = 0;
 const OCTO_LANE_LAST = 3;
 const OCTO_LANE_OFFSET = 1;
-
 const BUG_TICK_MS = 500;
 const BULLET_TICK_MS = 200;
-
+const GAME_TICK_START_MS = 0;
 const GAME_CONTROL_KEYS = ["Space", "ArrowLeft", "ArrowRight"];
 
 const GameContext = createContext<GameValue | null>(null);
 
 export const GameProvider = ({ children }: GameProviderProps) => {
-  const sfx = useSfx();
-  const score = useCounter();
+  const { play } = useSfx();
+  const { count, increment } = useCounter();
+
+  const frame = useRef<number | null>(null);
+  const lastBugTick = useRef(GAME_TICK_START_MS);
+  const lastBulletTick = useRef(GAME_TICK_START_MS);
 
   const [lanes, setLanes] = useState<LaneState[]>([
     { bug: ACTOR_CELL_IDLE, bullet: ACTOR_CELL_IDLE, collision: null },
@@ -64,29 +67,70 @@ export const GameProvider = ({ children }: GameProviderProps) => {
 
     setLanes((current) => {
       return current.map((actor, index) => {
-        if (isNotNil(actor.collision)) {
-          return { bug: ACTOR_CELL_IDLE, bullet: ACTOR_CELL_IDLE, collision: null };
+        if (index !== lane || isNotNil(actor.collision)) {
+          return actor;
         }
-        if (index === lane) {
-          return { ...actor, bug: actor.bug + ACTOR_CELL_OFFSET };
+        // Keep an overlap in place until
+        // the bullet tick registers the impact.
+        if (actor.bullet !== ACTOR_CELL_IDLE && actor.bug === actor.bullet) {
+          return actor;
         }
-        return actor;
+        return { ...actor, bug: actor.bug + ACTOR_CELL_OFFSET };
       });
     });
   }, [lanes.length]);
 
-  const handleBullets = useCallback(() => {
+  const handleBullets = useCallback((startedAt: number) => {
     setLanes((current) => {
       return current.map((actor) => {
         if (actor.bullet === ACTOR_CELL_IDLE) {
           return actor;
         }
-        // Remove the bullet
-        // when it hits the bug.
-        if (actor.bullet === actor.bug) {
-          return { ...actor, bullet: ACTOR_CELL_IDLE, collision: actor.bullet };
+        // Keep the impact visible for
+        // one bullet tick before removing the shot.
+        if (isNotNil(actor.collision)) {
+          return { ...actor, bullet: ACTOR_CELL_IDLE };
         }
-        return { ...actor, bullet: actor.bullet - ACTOR_CELL_OFFSET };
+
+        const bullet = actor.bullet - ACTOR_CELL_OFFSET;
+        const isCollision = actor.bug === actor.bullet || actor.bug === bullet;
+
+        if (actor.bug !== ACTOR_CELL_IDLE && isCollision) {
+          increment();
+          play("bug/hit");
+          // Keep the bullet at impact
+          // and record when the explosion started.
+          return {
+            ...actor,
+            bullet: actor.bug,
+            collision: { cell: actor.bug, startedAt },
+          };
+        }
+        return { ...actor, bullet };
+      });
+    });
+  }, [play, increment]);
+
+  const handleCollisions = useCallback((now: number) => {
+    const isExpired = ({ collision }: LaneState) => {
+      return (
+        isNotNil(collision) && now - collision.startedAt >= BUG_EXPLOSION_MS
+      );
+    };
+
+    setLanes((current) => {
+      if (current.every(negate(isExpired))) {
+        return current;
+      }
+      return current.map((actor) => {
+        if (isExpired(actor)) {
+          return {
+            bug: ACTOR_CELL_IDLE,
+            bullet: ACTOR_CELL_IDLE,
+            collision: null,
+          };
+        }
+        return actor;
       });
     });
   }, []);
@@ -94,7 +138,11 @@ export const GameProvider = ({ children }: GameProviderProps) => {
   const handleFire = () => {
     setLanes((current) => {
       return current.map((actor, index) => {
-        if (index === lane && actor.bullet === ACTOR_CELL_IDLE) {
+        if (
+          index === lane &&
+          actor.bullet === ACTOR_CELL_IDLE &&
+          isNil(actor.collision)
+        ) {
           return { ...actor, bullet: ACTOR_CELL_LAST };
         }
         return actor;
@@ -112,7 +160,7 @@ export const GameProvider = ({ children }: GameProviderProps) => {
     // Handheld click for every game key.
     // Space, left, and right share this press sound.
     if (GAME_CONTROL_KEYS.includes(event.code)) {
-      sfx.play("game/keyPress");
+      play("game/keyPress");
     }
 
     if (event.code === "Space") {
@@ -136,21 +184,47 @@ export const GameProvider = ({ children }: GameProviderProps) => {
   });
 
   useEffect(() => {
-    const bugs = setInterval(handleBugs, BUG_TICK_MS);
-    const bullets = setInterval(handleBullets, BULLET_TICK_MS);
+    const startedAt = performance.now();
+
+    lastBugTick.current = GAME_TICK_START_MS;
+    lastBulletTick.current = GAME_TICK_START_MS;
+
+    const update = (now: number) => {
+      const bugTick = Math.floor((now - startedAt) / BUG_TICK_MS);
+      const bulletTick = Math.floor((now - startedAt) / BULLET_TICK_MS);
+
+      handleCollisions(now);
+
+      // Keep a fixed order when
+      // both movements fall on the same frame.
+      if (bugTick > lastBugTick.current) {
+        handleBugs();
+        lastBugTick.current = bugTick;
+      }
+      if (bulletTick > lastBulletTick.current) {
+        handleBullets(now);
+        lastBulletTick.current = bulletTick;
+      }
+
+      frame.current = requestAnimationFrame(update);
+    };
+
+    frame.current = requestAnimationFrame(update);
 
     return () => {
-      clearInterval(bugs);
-      clearInterval(bullets);
+      if (isNotNil(frame.current)) {
+        cancelAnimationFrame(frame.current);
+        frame.current = null;
+      }
     };
-  }, [handleBugs, handleBullets]);
+  }, [handleBugs, handleBullets, handleCollisions]);
 
   return (
     <GameContext.Provider
       value={{
         lane,
         lanes,
-        score: score.count,
+        score: count,
       }}
     >
       {children}

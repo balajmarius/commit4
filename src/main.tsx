@@ -8,8 +8,6 @@ console.log(`
     ___( o)>
     \\ <_. )   For Adi,
      \`---'
-
-  Every time I make a game, I’ll think of you.
 `);
 
 const mount = document.getElementById("root");
