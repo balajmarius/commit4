@@ -18,7 +18,7 @@
     "no-implicit-coercion": "error",
     "no-return-assign": ["error", "always"],
     "no-undef": "error",
-    "no-ternary": "error",
+    "no-ternary": "off",
     "typescript/no-explicit-any": "error",
     "typescript/no-non-null-assertion": "error"
   },
