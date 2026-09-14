@@ -26,6 +26,7 @@ type LaneState = {
 };
 
 type GameValue = {
+  fireLane: number | null;
   lane: number;
   lanes: LaneState[];
   score: number;
@@ -50,6 +51,7 @@ export const GameProvider = ({ children }: GameProviderProps) => {
   const { count, increment } = useCounter();
 
   const frame = useRef<number | null>(null);
+  const fireEndsAt = useRef<number | null>(null);
   const lastBugTick = useRef(GAME_TICK_START_MS);
   const lastBulletTick = useRef(GAME_TICK_START_MS);
 
@@ -61,6 +63,7 @@ export const GameProvider = ({ children }: GameProviderProps) => {
   ]);
 
   const [lane, setLane] = useState(OCTO_LANE_FIRST);
+  const [fireLane, setFireLane] = useState<number | null>(null);
 
   const handleBugs = useCallback(() => {
     const lane = randomInt(lanes.length);
@@ -80,36 +83,40 @@ export const GameProvider = ({ children }: GameProviderProps) => {
     });
   }, [lanes.length]);
 
-  const handleBullets = useCallback((startedAt: number) => {
-    setLanes((current) => {
-      return current.map((actor) => {
-        if (actor.bullet === ACTOR_CELL_IDLE) {
-          return actor;
-        }
-        // Keep the impact visible for
-        // one bullet tick before removing the shot.
-        if (isNotNil(actor.collision)) {
-          return { ...actor, bullet: ACTOR_CELL_IDLE };
-        }
+  const handleBullets = useCallback(
+    (startedAt: number) => {
+      setLanes((current) => {
+        return current.map((actor) => {
+          if (actor.bullet === ACTOR_CELL_IDLE) {
+            return actor;
+          }
+          // Keep the impact visible for
+          // one bullet tick before removing the shot.
+          if (isNotNil(actor.collision)) {
+            return { ...actor, bullet: ACTOR_CELL_IDLE };
+          }
 
-        const bullet = actor.bullet - ACTOR_CELL_OFFSET;
-        const isCollision = actor.bug === actor.bullet || actor.bug === bullet;
+          const bullet = actor.bullet - ACTOR_CELL_OFFSET;
+          const isCollision =
+            actor.bug === actor.bullet || actor.bug === bullet;
 
-        if (actor.bug !== ACTOR_CELL_IDLE && isCollision) {
-          increment();
-          play("bug/hit");
-          // Keep the bullet at impact
-          // and record when the explosion started.
-          return {
-            ...actor,
-            bullet: actor.bug,
-            collision: { cell: actor.bug, startedAt },
-          };
-        }
-        return { ...actor, bullet };
+          if (actor.bug !== ACTOR_CELL_IDLE && isCollision) {
+            increment();
+            play("bug/hit");
+            // Keep the bullet at impact
+            // and record when the explosion started.
+            return {
+              ...actor,
+              bullet: actor.bug,
+              collision: { cell: actor.bug, startedAt },
+            };
+          }
+          return { ...actor, bullet };
+        });
       });
-    });
-  }, [play, increment]);
+    },
+    [play, increment],
+  );
 
   const handleCollisions = useCallback((now: number) => {
     const isExpired = ({ collision }: LaneState) => {
@@ -136,13 +143,19 @@ export const GameProvider = ({ children }: GameProviderProps) => {
   }, []);
 
   const handleFire = () => {
+    if (
+      lanes[lane].bullet !== ACTOR_CELL_IDLE ||
+      isNotNil(lanes[lane].collision)
+    ) {
+      return;
+    }
+
+    setFireLane(lane);
+    fireEndsAt.current = performance.now() + BUG_TICK_MS;
+
     setLanes((current) => {
       return current.map((actor, index) => {
-        if (
-          index === lane &&
-          actor.bullet === ACTOR_CELL_IDLE &&
-          isNil(actor.collision)
-        ) {
+        if (index === lane) {
           return { ...actor, bullet: ACTOR_CELL_LAST };
         }
         return actor;
@@ -160,6 +173,8 @@ export const GameProvider = ({ children }: GameProviderProps) => {
     // Handheld click for every game key.
     // Space, left, and right share this press sound.
     if (GAME_CONTROL_KEYS.includes(event.code)) {
+      fireEndsAt.current = null;
+      setFireLane(null);
       play("game/keyPress");
     }
 
@@ -193,6 +208,11 @@ export const GameProvider = ({ children }: GameProviderProps) => {
       const bugTick = Math.floor((now - startedAt) / BUG_TICK_MS);
       const bulletTick = Math.floor((now - startedAt) / BULLET_TICK_MS);
 
+      if (isNotNil(fireEndsAt.current) && now >= fireEndsAt.current) {
+        setFireLane(null);
+        fireEndsAt.current = null;
+      }
+
       handleCollisions(now);
 
       // Keep a fixed order when
@@ -222,6 +242,7 @@ export const GameProvider = ({ children }: GameProviderProps) => {
   return (
     <GameContext.Provider
       value={{
+        fireLane,
         lane,
         lanes,
         score: count,
