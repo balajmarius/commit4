@@ -17,6 +17,7 @@ export const Commit4 = () => {
 
       <button
         type="button"
+        aria-label="Start/On"
         className="absolute top-133 left-47.5 z-10 h-19 w-14 cursor-pointer bg-button bg-no-repeat opacity-0 outline-none active:opacity-100"
         onClick={handleStart}
       />
