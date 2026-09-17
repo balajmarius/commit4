@@ -3,8 +3,6 @@ import { Sprite } from "pixi.js";
 
 import { useAtlas } from "@/hooks/useAtlas";
 
-import { GameProvider } from "@/context/game";
-
 import { Bugs } from "@/components/bugs";
 import { Bullets } from "@/components/bullets";
 import { Octo } from "@/components/octo";
@@ -22,13 +20,11 @@ export const Scene = () => {
 
   return (
     <Application width={SCENE_WIDTH} height={SCENE_HEIGHT}>
-      <GameProvider>
-        <pixiSprite texture={atlas.textures.environment} />
-        <Bugs />
-        <Bullets />
-        <Octo />
-        <Score />
-      </GameProvider>
+      <pixiSprite texture={atlas.textures.environment} />
+      <Bugs />
+      <Bullets />
+      <Octo />
+      <Score />
     </Application>
   );
 };
