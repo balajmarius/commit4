@@ -58,7 +58,7 @@ export const Octo = () => {
   return (
     <pixiContainer>
       {OCTO_LANES.map((cell, index) => {
-        const isActive = index === lane && gameState === "on";
+        const isActive = ["on", "dead"].includes(gameState);
 
         return (
           <pixiContainer key={cell.body} x={cell.x} y={cell.y}>
@@ -74,7 +74,7 @@ export const Octo = () => {
             />
             <pixiSprite
               texture={textures[cell.body]}
-              alpha={isActive ? SPRITE_ALPHA_ACTIVE : SPRITE_ALPHA_DISABLED}
+              alpha={isActive && index === lane ? SPRITE_ALPHA_ACTIVE : SPRITE_ALPHA_DISABLED}
             />
           </pixiContainer>
         );
