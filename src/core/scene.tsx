@@ -19,7 +19,7 @@ export const Scene = () => {
   const atlas = useAtlas();
 
   return (
-    <Application width={SCENE_WIDTH} height={SCENE_HEIGHT}>
+    <Application width={SCENE_WIDTH} height={SCENE_HEIGHT} backgroundAlpha={0}>
       <pixiSprite texture={atlas.textures.environment} />
       <Bugs />
       <Bullets />

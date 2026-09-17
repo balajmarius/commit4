@@ -35,7 +35,7 @@ const BUG_TICK_MS = 500;
 const BULLET_TICK_MS = 200;
 
 const GAME_TICK_START = 0;
-const GAME_CONTROL_KEYS = ["Space", "ArrowLeft", "ArrowRight"];
+const GAME_CONTROL_KEYS = ["Space", "Enter", "ArrowLeft", "ArrowRight"];
 
 const GAME_LANES: LaneState[] = [
   { bug: ACTOR_CELL_IDLE, bullet: ACTOR_CELL_IDLE, collision: null },
@@ -167,13 +167,24 @@ export const GameProvider = ({ children }: GameProviderProps) => {
   };
 
   useEventListener("keydown", (event) => {
-    if (gameState !== "on" || GAME_CONTROL_KEYS.includes(event.code) === false) {
+    const isNotControlKey = GAME_CONTROL_KEYS.every((key) => {
+      return key !== event.code;
+    });
+
+    if (isNotControlKey) {
       return;
     }
 
     event.preventDefault();
 
     if (event.repeat) {
+      return;
+    }
+    if (event.code === "Enter") {
+      handleStart();
+      return;
+    }
+    if (gameState !== "on") {
       return;
     }
 
