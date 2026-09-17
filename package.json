@@ -17,7 +17,8 @@
     "format": "oxfmt --write .",
     "format:check": "oxfmt --check .",
     "check": "npm run typecheck && npm run lint && npm run format:check",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "prepare": "husky"
   },
   "dependencies": {
     "@pixi/react": "^8.0.5",
@@ -29,17 +30,28 @@
     "usehooks-ts": "^3.1.1"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.5.3",
+    "@commitlint/config-conventional": "^20.5.3",
     "@tailwindcss/vite": "^4.3.3",
     "@types/howler": "^2.2.13",
     "@types/node": "^22.20.1",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",
     "@vitejs/plugin-react": "^6.1.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
     "oxfmt": "^0.67.0",
     "oxlint": "^1.82.0",
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",
     "vite": "^8.2.2"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,mjs,cjs,mts,cts}": [
+      "oxfmt --write",
+      "oxlint --deny-warnings"
+    ],
+    "*.{json,jsonc,css,html,md,mdx,yaml,yml}": "oxfmt --write"
   },
   "engines": {
     "node": "^20.19.0 || >=22.12.0"

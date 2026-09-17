@@ -26,6 +26,8 @@ npm run dev
 - `npm run check` — check types, lint, and formatting.
 - `npm run format` — format the code.
 
+`npm install` enables Git hooks: staged files are formatted and linted before commit, and messages must follow Conventional Commits, for example `fix: keep octocat visible after game over`.
+
 GitHub Actions checks lint and formatting on every push. Pushes to `master` also deploy to Cloudflare Pages after checks and the build pass.
 
 ## License
