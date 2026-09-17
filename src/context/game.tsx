@@ -20,6 +20,7 @@ type GameValue = {
   lane: number;
   lanes: LaneState[];
   score: number;
+  handleStart: () => void;
 };
 
 type GameProviderProps = {
@@ -59,9 +60,10 @@ export const GameProvider = ({ children }: GameProviderProps) => {
   const [lane, setLane] = useState(OCTO_LANE_FIRST);
   const [fireLane, setFireLane] = useState<number | null>(null);
 
-  const handleReset = () => {
+  const handleStart = () => {
     reset();
     setGameState("on");
+    play("game/keyPress");
     setLanes(GAME_LANES);
   };
 
@@ -89,12 +91,12 @@ export const GameProvider = ({ children }: GameProviderProps) => {
       });
     });
 
-    // Stop the game when
-    // the bug moves past the last cell.
     if (bug > ACTOR_CELL_LAST) {
-      frame.current = null;
       play("octo/die");
       setGameState("dead");
+      // Stop the game when
+      // the bug moves past the last cell.
+      frame.current = null;
     }
   });
 
@@ -165,13 +167,14 @@ export const GameProvider = ({ children }: GameProviderProps) => {
   };
 
   useEventListener("keydown", (event) => {
+    if (gameState !== "on" || GAME_CONTROL_KEYS.includes(event.code) === false) {
+      return;
+    }
+
     event.preventDefault();
 
     if (event.repeat) {
       return;
-    }
-    if (gameState !== "on") {
-      handleReset();
     }
 
     fireEndsAt.current = null;
@@ -255,6 +258,7 @@ export const GameProvider = ({ children }: GameProviderProps) => {
         lane,
         lanes,
         score: count,
+        handleStart,
       }}
     >
       {children}
