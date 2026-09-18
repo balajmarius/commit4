@@ -20,6 +20,8 @@ export const Layout = ({ children }: LayoutProps) => {
     url: (
       <a
         href={links.url1}
+        target="_blank"
+        rel="noopener noreferrer"
         className="whitespace-nowrap text-blue-200 underline decoration-blue-200/30 underline-offset-4 hover:decoration-blue-200"
       />
     ),

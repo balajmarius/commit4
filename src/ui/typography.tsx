@@ -17,8 +17,8 @@ const typographyVariantMapping = {
 } as const;
 
 const typographyVariantClassNames: TypographyVariantMapping = {
-  h1: "font-serif text-3xl/tight font-normal tracking-tight text-balance italic",
-  h2: "text-2xl/tight font-normal tracking-tight text-balance",
+  h1: "font-serif text-3xl/tight tracking-tight text-balance italic",
+  h2: "text-2xl/tight tracking-tight text-balance",
   body1: "text-base/relaxed text-pretty",
   body2: "text-sm/relaxed text-pretty",
 };
