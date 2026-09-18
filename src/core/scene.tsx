@@ -1,5 +1,5 @@
 import { Application, extend } from "@pixi/react";
-import { Sprite } from "pixi.js";
+import { Container, Sprite } from "pixi.js";
 
 import { useAtlas } from "@/hooks/useAtlas";
 
@@ -11,9 +11,8 @@ import { Score } from "@/components/score";
 const SCENE_WIDTH = 400;
 const SCENE_HEIGHT = 300;
 
-// Registers Sprite so
-// <pixiSprite> is available in JSX.
-extend({ Sprite });
+// Register the Pixi elements used throughout the scene.
+extend({ Container, Sprite });
 
 export const Scene = () => {
   const atlas = useAtlas();

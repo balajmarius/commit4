@@ -1,12 +1,7 @@
-import { extend } from "@pixi/react";
-import { Container, Sprite } from "pixi.js";
-
 import { useAtlas } from "@/hooks/useAtlas";
 import { useGame } from "@/context/game";
 
 import { SPRITE_ALPHA_ACTIVE, SPRITE_ALPHA_DISABLED } from "@/utils/const";
-
-extend({ Container, Sprite });
 
 const BULLET_LANES = [
   {

@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Trans, useTranslation } from "react-i18next";
 
+import { Separator } from "@/ui/separator";
 import { Typography } from "@/ui/typography";
 
 export type LayoutProps = {
@@ -9,6 +10,7 @@ export type LayoutProps = {
 
 const links = {
   url1: "https://github.blog/open-source/gaming/game-off-2017-winners/",
+  url2: "https://github.com/balajmarius/commit4",
 } as const;
 
 export const Layout = ({ children }: LayoutProps) => {
@@ -16,12 +18,20 @@ export const Layout = ({ children }: LayoutProps) => {
 
   const renderers = {
     version: <span className="text-blue-200" />,
-    url: (
+    url1: (
       <a
         href={links.url1}
         target="_blank"
         rel="noopener noreferrer"
-        className="whitespace-nowrap text-blue-200 underline decoration-blue-200/30 underline-offset-4 hover:decoration-blue-200"
+        className="font-serif whitespace-nowrap text-blue-200"
+      />
+    ),
+    url2: (
+      <a
+        href={links.url2}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="font-serif whitespace-nowrap text-blue-200"
       />
     ),
   };
@@ -36,6 +46,12 @@ export const Layout = ({ children }: LayoutProps) => {
           <Trans t={t} i18nKey="project.description" components={renderers} />
         </Typography>
         <Typography>{t("project.controls")}</Typography>
+
+        <Separator />
+
+        <Typography>
+          <Trans t={t} i18nKey="project.source" components={renderers} />
+        </Typography>
       </header>
 
       <div className="xl:col-span-7">{children}</div>
