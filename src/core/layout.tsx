@@ -9,7 +9,6 @@ export type LayoutProps = {
 
 const links = {
   url1: "https://github.blog/open-source/gaming/game-off-2017-winners/",
-  url2: "https://github.com/balajmarius/commit4",
 } as const;
 
 export const Layout = ({ children }: LayoutProps) => {
