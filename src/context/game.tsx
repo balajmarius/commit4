@@ -1,26 +1,33 @@
 import { createContext, useContext, useState, useRef, useEffect, useCallback, type ReactNode } from "react";
 import { useCounter, useEventCallback, useEventListener } from "usehooks-ts";
-import { isNil, isNotNil, negate, randomInt } from "es-toolkit";
+import { clamp, isNil, isNotNil, negate, randomInt } from "es-toolkit";
+import { Howl } from "howler";
+
+import die from "@/static/sounds/die.mp3?url";
+import hit from "@/static/sounds/hit.mp3?url";
+import tick from "@/static/sounds/tick.mp3?url";
+import press from "@/static/sounds/press.mp3?url";
 
 import { ACTOR_CELL_IDLE, ACTOR_CELL_OFFSET, ACTOR_CELL_LAST, BUG_EXPLOSION_MS } from "@/utils/const";
-
-import { useSfx } from "@/hooks/useSfx";
 
 type GameState = "off" | "on" | "dead";
 
 type LaneState = {
   bug: number;
   bullet: number;
-  collision: { cell: number; startedAt: number } | null;
+  collisionAt: number | null;
 };
 
 type GameValue = {
   gameState: GameState;
-  fireLane: number | null;
-  lane: number;
-  lanes: LaneState[];
+  firingLaneIndex: number | null;
+  playerLaneIndex: number;
+  laneStates: LaneState[];
   score: number;
   handleStart: () => void;
+  handleFire: () => void;
+  handleMoveLeft: () => void;
+  handleMoveRight: () => void;
 };
 
 type GameProviderProps = {
@@ -34,44 +41,63 @@ const OCTO_LANE_OFFSET = 1;
 const BUG_TICK_MS = 500;
 const BULLET_TICK_MS = 200;
 
-const GAME_TICK_START = 0;
-const GAME_CONTROL_KEYS = ["Space", "Enter", "ArrowLeft", "ArrowRight"];
-
 const GAME_LANES: LaneState[] = [
-  { bug: ACTOR_CELL_IDLE, bullet: ACTOR_CELL_IDLE, collision: null },
-  { bug: ACTOR_CELL_IDLE, bullet: ACTOR_CELL_IDLE, collision: null },
-  { bug: ACTOR_CELL_IDLE, bullet: ACTOR_CELL_IDLE, collision: null },
-  { bug: ACTOR_CELL_IDLE, bullet: ACTOR_CELL_IDLE, collision: null },
+  { bug: ACTOR_CELL_IDLE, bullet: ACTOR_CELL_IDLE, collisionAt: null },
+  { bug: ACTOR_CELL_IDLE, bullet: ACTOR_CELL_IDLE, collisionAt: null },
+  { bug: ACTOR_CELL_IDLE, bullet: ACTOR_CELL_IDLE, collisionAt: null },
+  { bug: ACTOR_CELL_IDLE, bullet: ACTOR_CELL_IDLE, collisionAt: null },
 ];
+const GAME_TICK_START = 0;
+
+const sounds = {
+  hit: new Howl({ src: [hit] }),
+  die: new Howl({ src: [die] }),
+  tick: new Howl({ src: [tick] }),
+  press: new Howl({ src: [press] }),
+} as const;
 
 const GameContext = createContext<GameValue | null>(null);
 
 export const GameProvider = ({ children }: GameProviderProps) => {
   const frame = useRef<number | null>(null);
-  const fireEndsAt = useRef<number | null>(null);
+  const firingEndsAt = useRef<number | null>(null);
+  const startedAt = useRef(GAME_TICK_START);
   const lastBugTick = useRef(GAME_TICK_START);
   const lastBulletTick = useRef(GAME_TICK_START);
+  const previousCollisionsAt = useRef<(number | null)[]>([]);
 
-  const { play } = useSfx();
   const { count, increment, reset } = useCounter();
 
-  const [lanes, setLanes] = useState(GAME_LANES);
+  const [laneStates, setLaneStates] = useState(GAME_LANES);
   const [gameState, setGameState] = useState<GameState>("off");
-  const [lane, setLane] = useState(OCTO_LANE_FIRST);
-  const [fireLane, setFireLane] = useState<number | null>(null);
+  const [playerLaneIndex, setPlayerLaneIndex] = useState(OCTO_LANE_FIRST);
+  const [firingLaneIndex, setFiringLaneIndex] = useState<number | null>(null);
 
   const handleStart = () => {
+    if (gameState === "on") {
+      setGameState("off");
+    } else {
+      setGameState("on");
+    }
+
     reset();
-    setGameState("on");
-    play("game/keyPress");
-    setLanes(GAME_LANES);
+    sounds.press.play();
+
+    setFiringLaneIndex(null);
+    setPlayerLaneIndex(OCTO_LANE_FIRST);
+    setLaneStates(GAME_LANES);
+
+    firingEndsAt.current = null;
+    startedAt.current = performance.now();
+    lastBugTick.current = GAME_TICK_START;
+    lastBulletTick.current = GAME_TICK_START;
   };
 
   const handleBugs = useEventCallback(() => {
-    const laneIndex = randomInt(lanes.length);
-    const laneState = lanes[laneIndex];
+    const laneIndex = randomInt(laneStates.length);
+    const laneState = laneStates[laneIndex];
 
-    if (isNotNil(laneState.collision)) {
+    if (isNotNil(laneState.collisionAt)) {
       return;
     }
     // Keep an overlap in place until
@@ -82,7 +108,7 @@ export const GameProvider = ({ children }: GameProviderProps) => {
 
     const bug = laneState.bug + ACTOR_CELL_OFFSET;
 
-    setLanes((current) => {
+    setLaneStates((current) => {
       return current.map((laneState, index) => {
         if (index === laneIndex) {
           return { ...laneState, bug };
@@ -92,7 +118,7 @@ export const GameProvider = ({ children }: GameProviderProps) => {
     });
 
     if (bug > ACTOR_CELL_LAST) {
-      play("octo/die");
+      sounds.die.play();
       setGameState("dead");
       // Stop the game when
       // the bug moves past the last cell.
@@ -100,48 +126,51 @@ export const GameProvider = ({ children }: GameProviderProps) => {
     }
   });
 
-  const handleBullets = useCallback(
-    (startedAt: number) => {
-      setLanes((current) => {
-        return current.map((laneState) => {
-          if (laneState.bullet === ACTOR_CELL_IDLE) {
-            return laneState;
-          }
-          // Keep the impact visible for
-          // one bullet tick before removing the shot.
-          if (isNotNil(laneState.collision)) {
-            return { ...laneState, bullet: ACTOR_CELL_IDLE };
-          }
-
-          const bullet = laneState.bullet - ACTOR_CELL_OFFSET;
-          const isCollided = laneState.bug === laneState.bullet || laneState.bug === bullet;
-
-          if (laneState.bug !== ACTOR_CELL_IDLE && isCollided) {
-            increment();
-            play("bug/hit");
-            // Keep the bullet at impact
-            // and record when the explosion started.
-            return { ...laneState, bullet: laneState.bug, collision: { cell: laneState.bug, startedAt } };
-          }
-          return { ...laneState, bullet };
-        });
+  const handleBullets = useCallback((now: number) => {
+    setLaneStates((current) => {
+      const canSkipUpdate = current.every((actor) => {
+        return actor.bullet === ACTOR_CELL_IDLE;
       });
-    },
-    [play, increment],
-  );
 
-  const handleCollisions = useCallback((now: number) => {
-    const isExpired = ({ collision }: LaneState) => {
-      return isNotNil(collision) && now - collision.startedAt >= BUG_EXPLOSION_MS;
+      if (canSkipUpdate) {
+        return current;
+      }
+
+      return current.map((laneState) => {
+        if (laneState.bullet === ACTOR_CELL_IDLE) {
+          return laneState;
+        }
+        // Keep the impact visible for
+        // one bullet tick before removing the shot.
+        if (isNotNil(laneState.collisionAt)) {
+          return { ...laneState, bullet: ACTOR_CELL_IDLE };
+        }
+
+        const bullet = laneState.bullet - ACTOR_CELL_OFFSET;
+        const isCollided = laneState.bug === laneState.bullet || laneState.bug === bullet;
+
+        if (laneState.bug !== ACTOR_CELL_IDLE && isCollided) {
+          // Keep the bullet at impact
+          // and record when the explosion started.
+          return { ...laneState, bullet: laneState.bug, collisionAt: now };
+        }
+        return { ...laneState, bullet };
+      });
+    });
+  }, []);
+
+  const handleCollisionsCleanup = useCallback((now: number) => {
+    const isExpired = ({ collisionAt }: LaneState) => {
+      return isNotNil(collisionAt) && now - collisionAt >= BUG_EXPLOSION_MS;
     };
 
-    setLanes((current) => {
+    setLaneStates((current) => {
       if (current.every(negate(isExpired))) {
         return current;
       }
       return current.map((laneState) => {
         if (isExpired(laneState)) {
-          return { bug: ACTOR_CELL_IDLE, bullet: ACTOR_CELL_IDLE, collision: null };
+          return { bug: ACTOR_CELL_IDLE, bullet: ACTOR_CELL_IDLE, collisionAt: null };
         }
         return laneState;
       });
@@ -149,16 +178,21 @@ export const GameProvider = ({ children }: GameProviderProps) => {
   }, []);
 
   const handleFire = () => {
-    if (lanes[lane].bullet !== ACTOR_CELL_IDLE || isNotNil(lanes[lane].collision)) {
+    const hasCollision = isNotNil(laneStates[playerLaneIndex].collisionAt);
+    const hasBullet = laneStates[playerLaneIndex].bullet !== ACTOR_CELL_IDLE;
+
+    sounds.press.play();
+
+    if (gameState !== "on" || hasCollision || hasBullet) {
       return;
     }
 
-    setFireLane(lane);
-    fireEndsAt.current = performance.now() + BUG_TICK_MS;
+    setFiringLaneIndex(playerLaneIndex);
+    firingEndsAt.current = performance.now() + BUG_TICK_MS;
 
-    setLanes((current) => {
+    setLaneStates((current) => {
       return current.map((laneState, index) => {
-        if (index === lane) {
+        if (index === playerLaneIndex) {
           return { ...laneState, bullet: ACTOR_CELL_LAST };
         }
         return laneState;
@@ -166,17 +200,30 @@ export const GameProvider = ({ children }: GameProviderProps) => {
     });
   };
 
-  useEventListener("keydown", (event) => {
-    const isNotControlKey = GAME_CONTROL_KEYS.every((key) => {
-      return key !== event.code;
-    });
+  const handleMove = (offset: number) => {
+    sounds.press.play();
 
-    if (isNotControlKey) {
+    if (gameState !== "on") {
       return;
     }
 
-    event.preventDefault();
+    setFiringLaneIndex(null);
+    firingEndsAt.current = null;
 
+    setPlayerLaneIndex((current) => {
+      return clamp(current + offset, OCTO_LANE_FIRST, OCTO_LANE_LAST);
+    });
+  };
+
+  const handleMoveLeft = () => {
+    handleMove(-OCTO_LANE_OFFSET);
+  };
+
+  const handleMoveRight = () => {
+    handleMove(OCTO_LANE_OFFSET);
+  };
+
+  useEventListener("keydown", (event) => {
     if (event.repeat) {
       return;
     }
@@ -187,57 +234,55 @@ export const GameProvider = ({ children }: GameProviderProps) => {
     if (gameState !== "on") {
       return;
     }
-
-    fireEndsAt.current = null;
-    setFireLane(null);
-
-    if (GAME_CONTROL_KEYS.includes(event.code)) {
-      play("game/keyPress");
-    }
     if (event.code === "Space") {
+      event.preventDefault();
       handleFire();
     }
-    // Move the octo one lane to the left.
-    // Stay on the first lane if there is no further cell.
     if (event.code === "ArrowLeft") {
-      setLane((current) => {
-        return Math.max(OCTO_LANE_FIRST, current - OCTO_LANE_OFFSET);
-      });
+      handleMoveLeft();
     }
-    // Move the octo one lane to the right.
-    // Stay on the last lane if there is no further cell.
     if (event.code === "ArrowRight") {
-      setLane((current) => {
-        return Math.min(OCTO_LANE_LAST, current + OCTO_LANE_OFFSET);
-      });
+      handleMoveRight();
     }
   });
+
+  useEffect(() => {
+    laneStates.forEach((actor, index) => {
+      const isNewCollision =
+        isNotNil(actor.collisionAt) && actor.collisionAt !== previousCollisionsAt.current[index];
+
+      if (isNewCollision) {
+        increment();
+        sounds.hit.play();
+      }
+    });
+
+    previousCollisionsAt.current = laneStates.map((actor) => {
+      return actor.collisionAt;
+    });
+  }, [laneStates, increment]);
 
   useEffect(() => {
     if (gameState !== "on") {
       return;
     }
 
-    const startedAt = performance.now();
-
-    lastBugTick.current = GAME_TICK_START;
-    lastBulletTick.current = GAME_TICK_START;
-
     const update = (now: number) => {
-      const bugTick = Math.floor((now - startedAt) / BUG_TICK_MS);
-      const bulletTick = Math.floor((now - startedAt) / BULLET_TICK_MS);
+      const bugTick = Math.floor((now - startedAt.current) / BUG_TICK_MS);
+      const bulletTick = Math.floor((now - startedAt.current) / BULLET_TICK_MS);
 
-      if (isNotNil(fireEndsAt.current) && now >= fireEndsAt.current) {
-        setFireLane(null);
-        fireEndsAt.current = null;
+      if (isNotNil(firingEndsAt.current) && now >= firingEndsAt.current) {
+        setFiringLaneIndex(null);
+        firingEndsAt.current = null;
       }
 
-      handleCollisions(now);
+      handleCollisionsCleanup(now);
 
       // Keep a fixed order when
       // both movements fall on the same frame.
       if (bugTick > lastBugTick.current) {
         handleBugs();
+        sounds.tick.play();
         lastBugTick.current = bugTick;
       }
       if (isNil(frame.current)) {
@@ -259,17 +304,20 @@ export const GameProvider = ({ children }: GameProviderProps) => {
         frame.current = null;
       }
     };
-  }, [gameState, handleBugs, handleBullets, handleCollisions]);
+  }, [gameState, handleBugs, handleBullets, handleCollisionsCleanup]);
 
   return (
     <GameContext.Provider
       value={{
         gameState,
-        fireLane,
-        lane,
-        lanes,
+        firingLaneIndex,
+        playerLaneIndex,
+        laneStates,
         score: count,
         handleStart,
+        handleFire,
+        handleMoveLeft,
+        handleMoveRight,
       }}
     >
       {children}

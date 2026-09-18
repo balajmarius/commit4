@@ -1,12 +1,9 @@
-import { extend } from "@pixi/react";
-import { Container, Sprite } from "pixi.js";
+import { isNotNil } from "es-toolkit";
 
 import { useGame } from "@/context/game";
 import { useAtlas } from "@/hooks/useAtlas";
 
 import { SPRITE_ALPHA_ACTIVE, SPRITE_ALPHA_DISABLED } from "@/utils/const";
-
-extend({ Container, Sprite });
 
 const BUG_LANES = [
   {
@@ -52,7 +49,7 @@ const BUG_LANES = [
 ] as const;
 
 export const Bugs = () => {
-  const { lanes } = useGame();
+  const { laneStates } = useGame();
   const { textures } = useAtlas();
 
   return (
@@ -61,8 +58,8 @@ export const Bugs = () => {
         return (
           <pixiContainer key={`${lane.x}-${lane.y}`} x={lane.x} y={lane.y}>
             {lane.cells.map((cell, cellIndex) => {
-              const isActive = lanes[laneIndex].bug === cellIndex;
-              const isCollision = lanes[laneIndex].collision?.cell === cellIndex;
+              const isActive = laneStates[laneIndex].bug === cellIndex;
+              const isCollision = isActive && isNotNil(laneStates[laneIndex].collisionAt);
 
               return (
                 <pixiContainer key={cell.body} x={cell.x} y={cell.y}>

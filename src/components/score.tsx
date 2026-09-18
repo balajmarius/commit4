@@ -1,12 +1,7 @@
-import { extend } from "@pixi/react";
-import { Container, Sprite } from "pixi.js";
-
 import { useGame } from "@/context/game";
 import { useAtlas } from "@/hooks/useAtlas";
 
 import { SPRITE_ALPHA_ACTIVE, SPRITE_ALPHA_DISABLED } from "@/utils/const";
-
-extend({ Container, Sprite });
 
 const SCORE_X = 382;
 const SCORE_Y = 58;
@@ -43,7 +38,7 @@ export const Score = () => {
             key={`${digit}-${index}`}
             x={(index - digits.length) * SCORE_ADVANCE + offset}
             texture={texture}
-            alpha={gameState === "on" ? SPRITE_ALPHA_ACTIVE : SPRITE_ALPHA_DISABLED}
+            alpha={gameState === "off" ? SPRITE_ALPHA_DISABLED : SPRITE_ALPHA_ACTIVE}
           />
         );
       })}

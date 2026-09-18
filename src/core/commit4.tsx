@@ -1,26 +1,35 @@
 import { Suspense } from "react";
-
-import { useGame } from "@/context/game";
+import { useIntersectionObserver } from "usehooks-ts";
 
 import { Scene } from "@/core/scene";
+import { Layout } from "@/core/layout";
+import { Controls } from "@/ui/controls";
 
 export const Commit4 = () => {
-  const { handleStart } = useGame();
+  const { ref, entry } = useIntersectionObserver();
+
+  const isCaseClip = Boolean(entry?.rootBounds && entry.boundingClientRect.top > entry.rootBounds.bottom);
 
   return (
-    <div className="relative mx-auto my-8 flex h-235 w-166 items-start justify-center after:absolute after:inset-0 after:bg-case after:bg-no-repeat after:drop-shadow-xl">
-      <div className="relative mt-23 h-75 w-100 bg-lcd bg-no-repeat after:absolute after:inset-0 after:bg-screen after:bg-no-repeat">
-        <Suspense>
-          <Scene />
-        </Suspense>
-      </div>
+    <Layout>
+      <div className="@container relative mx-auto aspect-166/235 w-full max-w-166">
+        <div className="absolute top-0 left-0 flex h-235 w-166 origin-top-left scale-[calc(100cqw/41.5rem)] justify-center after:absolute after:inset-0 after:bg-case after:bg-no-repeat after:drop-shadow-xl">
+          <div className="relative mt-23 h-75 w-100 bg-lcd after:absolute after:inset-0 after:bg-screen">
+            <Suspense>
+              <Scene />
+            </Suspense>
+          </div>
+          <Controls />
+        </div>
 
-      <button
-        type="button"
-        aria-label="Start/On"
-        className="absolute top-133 left-47.5 z-10 h-19 w-14 cursor-pointer bg-button bg-no-repeat opacity-0 outline-none active:opacity-100"
-        onClick={handleStart}
-      />
-    </div>
+        <div ref={ref} aria-hidden="true" className="pointer-events-none absolute bottom-0 h-px w-full" />
+
+        {isCaseClip ? (
+          <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-20">
+            <div className="fixed inset-x-0 bottom-0 h-24 bg-linear-to-t from-white via-white/30 to-transparent" />
+          </div>
+        ) : null}
+      </div>
+    </Layout>
   );
 };

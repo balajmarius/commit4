@@ -1,12 +1,7 @@
-import { extend } from "@pixi/react";
-import { Container, Sprite } from "pixi.js";
-
 import { useAtlas } from "@/hooks/useAtlas";
 import { useGame } from "@/context/game";
 
 import { SPRITE_ALPHA_ACTIVE, SPRITE_ALPHA_DISABLED } from "@/utils/const";
-
-extend({ Container, Sprite });
 
 const BULLET_LANES = [
   {
@@ -55,7 +50,7 @@ const BULLET_X = 37;
 const BULLET_Y = 42;
 
 export const Bullets = () => {
-  const { lanes } = useGame();
+  const { laneStates } = useGame();
   const { textures } = useAtlas();
 
   return (
@@ -64,7 +59,7 @@ export const Bullets = () => {
         return (
           <pixiContainer key={lane.x} x={lane.x} y={lane.y}>
             {lane.cells.map((cell, cellIndex) => {
-              const isActive = lanes[laneIndex].bullet === cellIndex;
+              const isActive = laneStates[laneIndex].bullet === cellIndex;
 
               return (
                 <pixiSprite

@@ -1,3 +1,5 @@
+import "@/i18n";
+
 import { isNil } from "es-toolkit";
 import { createRoot } from "react-dom/client";
 
