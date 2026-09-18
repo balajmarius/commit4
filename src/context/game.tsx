@@ -49,6 +49,7 @@ const GameContext = createContext<GameValue | null>(null);
 export const GameProvider = ({ children }: GameProviderProps) => {
   const frame = useRef<number | null>(null);
   const fireEndsAt = useRef<number | null>(null);
+  const startedAt = useRef(GAME_TICK_START);
   const lastBugTick = useRef(GAME_TICK_START);
   const lastBulletTick = useRef(GAME_TICK_START);
 
@@ -62,9 +63,16 @@ export const GameProvider = ({ children }: GameProviderProps) => {
 
   const handleStart = () => {
     reset();
+    setLane(OCTO_LANE_FIRST);
+    setFireLane(null);
+    setLanes(GAME_LANES);
     setGameState("on");
     play("game/keyPress");
-    setLanes(GAME_LANES);
+
+    fireEndsAt.current = null;
+    startedAt.current = performance.now();
+    lastBugTick.current = GAME_TICK_START;
+    lastBulletTick.current = GAME_TICK_START;
   };
 
   const handleBugs = useEventCallback(() => {
@@ -188,10 +196,11 @@ export const GameProvider = ({ children }: GameProviderProps) => {
       return;
     }
 
-    fireEndsAt.current = null;
     setFireLane(null);
-
     play("game/keyPress");
+
+    fireEndsAt.current = null;
+
     if (event.code === "Space") {
       handleFire();
     }
@@ -216,14 +225,9 @@ export const GameProvider = ({ children }: GameProviderProps) => {
       return;
     }
 
-    const startedAt = performance.now();
-
-    lastBugTick.current = GAME_TICK_START;
-    lastBulletTick.current = GAME_TICK_START;
-
     const update = (now: number) => {
-      const bugTick = Math.floor((now - startedAt) / BUG_TICK_MS);
-      const bulletTick = Math.floor((now - startedAt) / BULLET_TICK_MS);
+      const bugTick = Math.floor((now - startedAt.current) / BUG_TICK_MS);
+      const bulletTick = Math.floor((now - startedAt.current) / BULLET_TICK_MS);
 
       if (isNotNil(fireEndsAt.current) && now >= fireEndsAt.current) {
         setFireLane(null);
