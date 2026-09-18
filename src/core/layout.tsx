@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import { Trans, useTranslation } from "react-i18next";
 
-import { Separator } from "@/ui/separator";
 import { Typography } from "@/ui/typography";
 
 export type LayoutProps = {
@@ -46,9 +45,6 @@ export const Layout = ({ children }: LayoutProps) => {
           <Trans t={t} i18nKey="project.description" components={renderers} />
         </Typography>
         <Typography>{t("project.controls")}</Typography>
-
-        <Separator />
-
         <Typography>
           <Trans t={t} i18nKey="project.source" components={renderers} />
         </Typography>
