@@ -26,8 +26,8 @@ export const Layout = ({ children }: LayoutProps) => {
   };
 
   return (
-    <main className="mx-auto grid max-w-7xl grid-cols-12 gap-8 px-12 py-16 text-blue-100 antialiased">
-      <header className="sticky top-36 col-span-5 flex max-w-104 flex-col gap-4 self-start">
+    <main className="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-6 py-8 text-blue-100 antialiased sm:px-12 sm:py-16 xl:grid-cols-12">
+      <header className="mx-auto flex w-full max-w-104 flex-col gap-4 self-start xl:sticky xl:top-36 xl:col-span-5 xl:mx-0">
         <Typography variant="h1">
           <Trans t={t} i18nKey="project.title" components={renderers} />
         </Typography>
@@ -37,7 +37,7 @@ export const Layout = ({ children }: LayoutProps) => {
         <Typography>{t("project.controls")}</Typography>
       </header>
 
-      <div className="col-span-7">{children}</div>
+      <div className="xl:col-span-7">{children}</div>
     </main>
   );
 };
