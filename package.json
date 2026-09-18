@@ -24,9 +24,11 @@
     "@pixi/react": "^8.0.5",
     "es-toolkit": "^1.52.0",
     "howler": "^2.2.4",
+    "i18next": "^26.4.2",
     "pixi.js": "^8.20.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
+    "react-i18next": "^17.0.14",
     "usehooks-ts": "^3.1.1"
   },
   "devDependencies": {

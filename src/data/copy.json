@@ -1,0 +1,11 @@
+{
+  "project": {
+    "title": "Commit<version>4</version>",
+    "description": "A throwback to classic LCD games, built for GitHub Game Off 2017. Winner of <url>Best Theme Interpretation</url>.",
+    "controls": "Click Start/On or press Enter to start. Move with the left and right arrow keys, and press Space to commit.",
+    "github": "Star on GitHub"
+  },
+  "game": {
+    "start": "Start/On"
+  }
+}

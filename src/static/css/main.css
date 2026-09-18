@@ -19,8 +19,9 @@
 @theme {
   --font-sans: "General Sans", sans-serif;
   --font-serif: "Gambetta", Georgia, serif;
-  --color-ink: #34384c;
-  --color-link: #0e63ff;
+
+  --color-blue-100: #34384c;
+  --color-blue-200: #0e63ff;
 
   --background-image-case: url("../images/bg-1@2x.png");
   --background-image-screen: url("../images/bg-2@2x.png");
