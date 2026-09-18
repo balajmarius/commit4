@@ -62,17 +62,17 @@ export const GameProvider = ({ children }: GameProviderProps) => {
   const [fireLane, setFireLane] = useState<number | null>(null);
 
   const handleStart = () => {
-    fireEndsAt.current = null;
-    startedAt.current = performance.now();
-    lastBugTick.current = GAME_TICK_START;
-    lastBulletTick.current = GAME_TICK_START;
-
     reset();
     setLane(OCTO_LANE_FIRST);
     setFireLane(null);
     setLanes(GAME_LANES);
     setGameState("on");
     play("game/keyPress");
+
+    fireEndsAt.current = null;
+    startedAt.current = performance.now();
+    lastBugTick.current = GAME_TICK_START;
+    lastBulletTick.current = GAME_TICK_START;
   };
 
   const handleBugs = useEventCallback(() => {
@@ -196,10 +196,11 @@ export const GameProvider = ({ children }: GameProviderProps) => {
       return;
     }
 
-    fireEndsAt.current = null;
     setFireLane(null);
-
     play("game/keyPress");
+
+    fireEndsAt.current = null;
+
     if (event.code === "Space") {
       handleFire();
     }
