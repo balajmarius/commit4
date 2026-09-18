@@ -191,9 +191,7 @@ export const GameProvider = ({ children }: GameProviderProps) => {
     fireEndsAt.current = null;
     setFireLane(null);
 
-    if (GAME_CONTROL_KEYS.includes(event.code)) {
-      play("game/keyPress");
-    }
+    play("game/keyPress");
     if (event.code === "Space") {
       handleFire();
     }

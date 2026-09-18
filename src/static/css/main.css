@@ -1,6 +1,28 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "General Sans";
+  src: url("../fonts/GeneralSans-Regular.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Gambetta";
+  src: url("../fonts/Gambetta-MediumItalic.woff2") format("woff2");
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+}
+
 @theme {
+  --font-sans: "General Sans", sans-serif;
+  --font-serif: "Gambetta", Georgia, serif;
+
+  --color-blue-100: #34384c;
+  --color-blue-200: #0e63ff;
+
   --background-image-case: url("../images/bg-1@2x.png");
   --background-image-screen: url("../images/bg-2@2x.png");
   --background-image-button: url("../images/bg-3@2x.png");

@@ -1,12 +1,7 @@
-import { extend } from "@pixi/react";
-import { Container, Sprite } from "pixi.js";
-
 import { useGame } from "@/context/game";
 import { useAtlas } from "@/hooks/useAtlas";
 
 import { SPRITE_ALPHA_ACTIVE, SPRITE_ALPHA_DISABLED } from "@/utils/const";
-
-extend({ Container, Sprite });
 
 const SCORE_X = 382;
 const SCORE_Y = 58;
