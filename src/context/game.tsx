@@ -37,15 +37,13 @@ const OCTO_LANE_OFFSET = 1;
 const BUG_TICK_MS = 500;
 const BULLET_TICK_MS = 200;
 
-const GAME_TICK_START = 0;
-const GAME_CONTROL_KEYS = ["Space", "Enter", "ArrowLeft", "ArrowRight"];
-
 const GAME_LANES: LaneState[] = [
   { bug: ACTOR_CELL_IDLE, bullet: ACTOR_CELL_IDLE, collision: null },
   { bug: ACTOR_CELL_IDLE, bullet: ACTOR_CELL_IDLE, collision: null },
   { bug: ACTOR_CELL_IDLE, bullet: ACTOR_CELL_IDLE, collision: null },
   { bug: ACTOR_CELL_IDLE, bullet: ACTOR_CELL_IDLE, collision: null },
 ];
+const GAME_TICK_START = 0;
 
 const GameContext = createContext<GameValue | null>(null);
 
@@ -210,16 +208,6 @@ export const GameProvider = ({ children }: GameProviderProps) => {
   };
 
   useEventListener("keydown", (event) => {
-    const isNotControlKey = GAME_CONTROL_KEYS.every((key) => {
-      return key !== event.code;
-    });
-
-    if (isNotControlKey) {
-      return;
-    }
-
-    event.preventDefault();
-
     if (event.repeat) {
       return;
     }
@@ -231,6 +219,7 @@ export const GameProvider = ({ children }: GameProviderProps) => {
       return;
     }
     if (event.code === "Space") {
+      event.preventDefault();
       handleFire();
     }
     if (event.code === "ArrowLeft") {
