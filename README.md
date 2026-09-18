@@ -10,7 +10,7 @@ Winner of **Best Theme Interpretation** at [GitHub Game Off 2017](https://github
 
 ## Controls
 
-Press any key to start or restart. Use **← / →** to move and **Space** to shoot.
+Press **Enter** or click **Start/On** to start or restart. Use **← / →** to move and **Space** to shoot.
 
 ## Development
 
