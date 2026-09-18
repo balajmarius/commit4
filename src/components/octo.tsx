@@ -44,7 +44,7 @@ const OCTO_LANES = [
 
 export const Octo = () => {
   const { textures } = useAtlas();
-  const { lane, lanes, fireLane, gameState } = useGame();
+  const { lane, lanes, firingLane, gameState } = useGame();
 
   const isActive = gameState !== "off";
   const blast = lanes.findIndex((laneState) => {
@@ -64,7 +64,7 @@ export const Octo = () => {
             />
             <pixiSprite
               texture={textures[cell.tentacles]}
-              alpha={index === fireLane ? SPRITE_ALPHA_ACTIVE : SPRITE_ALPHA_DISABLED}
+              alpha={index === firingLane ? SPRITE_ALPHA_ACTIVE : SPRITE_ALPHA_DISABLED}
             />
             <pixiSprite
               texture={textures[cell.body]}

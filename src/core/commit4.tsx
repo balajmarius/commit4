@@ -1,17 +1,12 @@
 import { Suspense } from "react";
-import { useTranslation } from "react-i18next";
 import { useIntersectionObserver } from "usehooks-ts";
-
-import { useGame } from "@/context/game";
 
 import { Scene } from "@/core/scene";
 import { Layout } from "@/core/layout";
+import { Controls } from "@/ui/controls";
 
 export const Commit4 = () => {
-  const { t } = useTranslation();
   const { ref, entry } = useIntersectionObserver();
-
-  const { handleStart } = useGame();
 
   const isCaseClip = Boolean(entry?.rootBounds && entry.boundingClientRect.top > entry.rootBounds.bottom);
 
@@ -24,13 +19,7 @@ export const Commit4 = () => {
               <Scene />
             </Suspense>
           </div>
-
-          <button
-            type="button"
-            aria-label={t("game.start")}
-            className="absolute top-133 left-47.5 z-10 h-19 w-14 cursor-pointer bg-button opacity-0 outline-none active:opacity-100"
-            onClick={handleStart}
-          />
+          <Controls />
         </div>
 
         <div ref={ref} aria-hidden="true" className="pointer-events-none absolute bottom-0 h-px w-full" />

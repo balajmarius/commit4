@@ -6,6 +6,9 @@
     "source": "Star or fork the project on <url2>GitHub</url2>."
   },
   "game": {
-    "start": "Start/On"
+    "start": "Start/On",
+    "moveLeft": "Move left",
+    "moveRight": "Move right",
+    "commit": "Commit"
   }
 }

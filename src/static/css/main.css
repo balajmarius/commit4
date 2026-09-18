@@ -25,6 +25,9 @@
 
   --background-image-case: url("../images/bg-1@2x.png");
   --background-image-screen: url("../images/bg-2@2x.png");
-  --background-image-button: url("../images/bg-3@2x.png");
-  --background-image-lcd: url("../images/bg-4@2x.png");
+  --background-image-button: url("../images/button-1@2x.png");
+  --background-image-lcd: url("../images/bg-3@2x.png");
+  --background-image-button-left: url("../images/button-2@2x.png");
+  --background-image-button-commit: url("../images/button-3@2x.png");
+  --background-image-button-right: url("../images/button-4@2x.png");
 }

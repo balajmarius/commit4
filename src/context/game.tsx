@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useRef, useEffect, useCallback, type ReactNode } from "react";
 import { useCounter, useEventCallback, useEventListener } from "usehooks-ts";
-import { isNil, isNotNil, negate, randomInt } from "es-toolkit";
+import { clamp, isNil, isNotNil, negate, randomInt } from "es-toolkit";
 
 import { ACTOR_CELL_IDLE, ACTOR_CELL_OFFSET, ACTOR_CELL_LAST, BUG_EXPLOSION_MS } from "@/utils/const";
 
@@ -16,11 +16,14 @@ type LaneState = {
 
 type GameValue = {
   gameState: GameState;
-  fireLane: number | null;
+  firingLane: number | null;
   lane: number;
   lanes: LaneState[];
   score: number;
   handleStart: () => void;
+  handleFire: () => void;
+  handleMoveLeft: () => void;
+  handleMoveRight: () => void;
 };
 
 type GameProviderProps = {
@@ -59,7 +62,7 @@ export const GameProvider = ({ children }: GameProviderProps) => {
   const [lanes, setLanes] = useState(GAME_LANES);
   const [gameState, setGameState] = useState<GameState>("off");
   const [lane, setLane] = useState(OCTO_LANE_FIRST);
-  const [fireLane, setFireLane] = useState<number | null>(null);
+  const [firingLane, setFiringLane] = useState<number | null>(null);
 
   const handleStart = () => {
     if (gameState === "on") {
@@ -69,7 +72,7 @@ export const GameProvider = ({ children }: GameProviderProps) => {
     }
 
     reset();
-    setFireLane(null);
+    setFiringLane(null);
     setLane(OCTO_LANE_FIRST);
     setLanes(GAME_LANES);
     play("game/keyPress");
@@ -162,11 +165,15 @@ export const GameProvider = ({ children }: GameProviderProps) => {
   }, []);
 
   const handleFire = () => {
-    if (lanes[lane].bullet !== ACTOR_CELL_IDLE || isNotNil(lanes[lane].collision)) {
+    const isActive = lanes[lane].bullet !== ACTOR_CELL_IDLE;
+
+    play("game/keyPress");
+
+    if (gameState !== "on" || isActive || isNotNil(lanes[lane].collision)) {
       return;
     }
 
-    setFireLane(lane);
+    setFiringLane(lane);
     fireEndsAt.current = performance.now() + BUG_TICK_MS;
 
     setLanes((current) => {
@@ -179,16 +186,24 @@ export const GameProvider = ({ children }: GameProviderProps) => {
     });
   };
 
-  const handleMoveLeft = () => {
+  const handleMove = (offset: number) => {
+    play("game/keyPress");
+
+    if (gameState !== "on") {
+      return;
+    }
+
     setLane((current) => {
-      return Math.max(OCTO_LANE_FIRST, current - OCTO_LANE_OFFSET);
+      return clamp(current + offset, OCTO_LANE_FIRST, OCTO_LANE_LAST);
     });
   };
 
+  const handleMoveLeft = () => {
+    handleMove(-OCTO_LANE_OFFSET);
+  };
+
   const handleMoveRight = () => {
-    setLane((current) => {
-      return Math.min(OCTO_LANE_LAST, current + OCTO_LANE_OFFSET);
-    });
+    handleMove(OCTO_LANE_OFFSET);
   };
 
   useEventListener("keydown", (event) => {
@@ -213,9 +228,7 @@ export const GameProvider = ({ children }: GameProviderProps) => {
       return;
     }
 
-    setFireLane(null);
-    play("game/keyPress");
-
+    setFiringLane(null);
     fireEndsAt.current = null;
 
     if (event.code === "Space") {
@@ -239,7 +252,7 @@ export const GameProvider = ({ children }: GameProviderProps) => {
       const bulletTick = Math.floor((now - startedAt.current) / BULLET_TICK_MS);
 
       if (isNotNil(fireEndsAt.current) && now >= fireEndsAt.current) {
-        setFireLane(null);
+        setFiringLane(null);
         fireEndsAt.current = null;
       }
 
@@ -276,11 +289,12 @@ export const GameProvider = ({ children }: GameProviderProps) => {
     <GameContext.Provider
       value={{
         gameState,
-        fireLane,
+        firingLane,
         lane,
         lanes,
         score: count,
         handleStart,
+        handleFire,
         handleMoveLeft,
         handleMoveRight,
       }}
