@@ -51,7 +51,7 @@ const GameContext = createContext<GameValue | null>(null);
 
 export const GameProvider = ({ children }: GameProviderProps) => {
   const frame = useRef<number | null>(null);
-  const fireEndsAt = useRef<number | null>(null);
+  const firingEndsAt = useRef<number | null>(null);
   const startedAt = useRef(GAME_TICK_START);
   const lastBugTick = useRef(GAME_TICK_START);
   const lastBulletTick = useRef(GAME_TICK_START);
@@ -77,7 +77,7 @@ export const GameProvider = ({ children }: GameProviderProps) => {
     setLanes(GAME_LANES);
     play("game/keyPress");
 
-    fireEndsAt.current = null;
+    firingEndsAt.current = null;
     startedAt.current = performance.now();
     lastBugTick.current = GAME_TICK_START;
     lastBulletTick.current = GAME_TICK_START;
@@ -174,7 +174,7 @@ export const GameProvider = ({ children }: GameProviderProps) => {
     }
 
     setFiringLane(lane);
-    fireEndsAt.current = performance.now() + BUG_TICK_MS;
+    firingEndsAt.current = performance.now() + BUG_TICK_MS;
 
     setLanes((current) => {
       return current.map((laneState, index) => {
@@ -192,6 +192,9 @@ export const GameProvider = ({ children }: GameProviderProps) => {
     if (gameState !== "on") {
       return;
     }
+
+    setFiringLane(null);
+    firingEndsAt.current = null;
 
     setLane((current) => {
       return clamp(current + offset, OCTO_LANE_FIRST, OCTO_LANE_LAST);
@@ -227,10 +230,6 @@ export const GameProvider = ({ children }: GameProviderProps) => {
     if (gameState !== "on") {
       return;
     }
-
-    setFiringLane(null);
-    fireEndsAt.current = null;
-
     if (event.code === "Space") {
       handleFire();
     }
@@ -251,9 +250,9 @@ export const GameProvider = ({ children }: GameProviderProps) => {
       const bugTick = Math.floor((now - startedAt.current) / BUG_TICK_MS);
       const bulletTick = Math.floor((now - startedAt.current) / BULLET_TICK_MS);
 
-      if (isNotNil(fireEndsAt.current) && now >= fireEndsAt.current) {
+      if (isNotNil(firingEndsAt.current) && now >= firingEndsAt.current) {
         setFiringLane(null);
-        fireEndsAt.current = null;
+        firingEndsAt.current = null;
       }
 
       handleCollisions(now);
