@@ -38,7 +38,7 @@ export const Score = () => {
             key={`${digit}-${index}`}
             x={(index - digits.length) * SCORE_ADVANCE + offset}
             texture={texture}
-            alpha={gameState === "on" ? SPRITE_ALPHA_ACTIVE : SPRITE_ALPHA_DISABLED}
+            alpha={gameState === "off" ? SPRITE_ALPHA_DISABLED : SPRITE_ALPHA_ACTIVE}
           />
         );
       })}
