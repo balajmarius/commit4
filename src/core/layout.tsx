@@ -36,7 +36,7 @@ export const Layout = ({ children }: LayoutProps) => {
   };
 
   return (
-    <main className="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-6 py-8 text-blue-100 antialiased sm:px-12 sm:py-16 xl:grid-cols-12">
+    <main className="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-6 py-8 text-blue-100 antialiased selection:bg-blue-200 selection:text-white sm:px-12 sm:py-16 xl:grid-cols-12">
       <header className="mx-auto flex w-full max-w-104 flex-col gap-4 self-start xl:sticky xl:top-36 xl:col-span-5 xl:mx-0">
         <Typography variant="h1">
           <Trans t={t} i18nKey="project.title" components={renderers} />
