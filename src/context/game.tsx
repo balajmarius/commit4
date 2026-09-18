@@ -62,11 +62,16 @@ export const GameProvider = ({ children }: GameProviderProps) => {
   const [fireLane, setFireLane] = useState<number | null>(null);
 
   const handleStart = () => {
+    if (gameState === "on") {
+      setGameState("off");
+    } else {
+      setGameState("on");
+    }
+
     reset();
-    setLane(OCTO_LANE_FIRST);
     setFireLane(null);
+    setLane(OCTO_LANE_FIRST);
     setLanes(GAME_LANES);
-    setGameState("on");
     play("game/keyPress");
 
     fireEndsAt.current = null;
@@ -174,6 +179,18 @@ export const GameProvider = ({ children }: GameProviderProps) => {
     });
   };
 
+  const handleMoveLeft = () => {
+    setLane((current) => {
+      return Math.max(OCTO_LANE_FIRST, current - OCTO_LANE_OFFSET);
+    });
+  };
+
+  const handleMoveRight = () => {
+    setLane((current) => {
+      return Math.min(OCTO_LANE_LAST, current + OCTO_LANE_OFFSET);
+    });
+  };
+
   useEventListener("keydown", (event) => {
     const isNotControlKey = GAME_CONTROL_KEYS.every((key) => {
       return key !== event.code;
@@ -204,19 +221,11 @@ export const GameProvider = ({ children }: GameProviderProps) => {
     if (event.code === "Space") {
       handleFire();
     }
-    // Move the octo one lane to the left.
-    // Stay on the first lane if there is no further cell.
     if (event.code === "ArrowLeft") {
-      setLane((current) => {
-        return Math.max(OCTO_LANE_FIRST, current - OCTO_LANE_OFFSET);
-      });
+      handleMoveLeft();
     }
-    // Move the octo one lane to the right.
-    // Stay on the last lane if there is no further cell.
     if (event.code === "ArrowRight") {
-      setLane((current) => {
-        return Math.min(OCTO_LANE_LAST, current + OCTO_LANE_OFFSET);
-      });
+      handleMoveRight();
     }
   });
 
@@ -272,6 +281,8 @@ export const GameProvider = ({ children }: GameProviderProps) => {
         lanes,
         score: count,
         handleStart,
+        handleMoveLeft,
+        handleMoveRight,
       }}
     >
       {children}
