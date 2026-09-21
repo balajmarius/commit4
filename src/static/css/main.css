@@ -31,7 +31,7 @@
   --background-image-button-commit: url("../images/button-3@2x.png");
   --background-image-button-right: url("../images/button-4@2x.png");
 
-  --background-image-clip-out: linear-gradient(
+  --background-image-case-fade: linear-gradient(
     to bottom,
     oklch(100% 0 0 / 0%) 0%,
     oklch(100% 0 0 / 7%) 16%,

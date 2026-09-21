@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { useIntersectionObserver } from "usehooks-ts";
+import { twMerge } from "tailwind-merge";
 
 import { Scene } from "@/core/scene";
 import { Layout } from "@/core/layout";
@@ -8,7 +9,7 @@ import { Controls } from "@/ui/controls";
 export const Commit4 = () => {
   const { ref, entry } = useIntersectionObserver();
 
-  const isCaseClip = Boolean(entry?.rootBounds && entry.boundingClientRect.top > entry.rootBounds.bottom);
+  const isCaseClipped = Boolean(entry?.rootBounds && entry.boundingClientRect.top > entry.rootBounds.bottom);
 
   return (
     <Layout>
@@ -24,11 +25,14 @@ export const Commit4 = () => {
 
         <div ref={ref} aria-hidden="true" className="pointer-events-none absolute bottom-0 h-px w-full" />
 
-        {isCaseClip ? (
-          <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-20">
-            <div className="fixed inset-x-0 bottom-0 h-40 bg-clip-out" />
-          </div>
-        ) : null}
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-20">
+          <div
+            className={twMerge(
+              "fixed inset-x-0 bottom-0 h-24 bg-case-fade transition-opacity ease-out",
+              isCaseClipped ? "opacity-100" : "opacity-0",
+            )}
+          />
+        </div>
       </div>
     </Layout>
   );
