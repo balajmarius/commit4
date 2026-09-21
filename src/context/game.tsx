@@ -228,6 +228,7 @@ export const GameProvider = ({ children }: GameProviderProps) => {
       return;
     }
     if (event.code === "Enter") {
+      event.preventDefault();
       handleStart();
       return;
     }
