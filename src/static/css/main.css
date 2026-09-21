@@ -17,11 +17,11 @@
 }
 
 @theme {
-  --font-sans: "General Sans", sans-serif;
-  --font-serif: "Gambetta", Georgia, serif;
-
   --color-blue-100: #34384c;
   --color-blue-200: #0e63ff;
+
+  --font-sans: "General Sans", sans-serif;
+  --font-serif: "Gambetta", Georgia, serif;
 
   --background-image-case: url("../images/bg-1@2x.png");
   --background-image-screen: url("../images/bg-2@2x.png");
@@ -30,4 +30,15 @@
   --background-image-button-left: url("../images/button-2@2x.png");
   --background-image-button-commit: url("../images/button-3@2x.png");
   --background-image-button-right: url("../images/button-4@2x.png");
+
+  --background-image-clip-out: linear-gradient(
+    to bottom,
+    oklch(100% 0 0 / 0%) 0%,
+    oklch(100% 0 0 / 7%) 16%,
+    oklch(100% 0 0 / 25%) 33%,
+    oklch(100% 0 0 / 50%) 50%,
+    oklch(100% 0 0 / 75%) 67%,
+    oklch(100% 0 0 / 93%) 84%,
+    oklch(100% 0 0 / 100%) 100%
+  );
 }

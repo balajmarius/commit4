@@ -26,7 +26,7 @@ export const Commit4 = () => {
 
         {isCaseClip ? (
           <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-20">
-            <div className="fixed inset-x-0 bottom-0 h-24 bg-linear-to-t from-white via-white/30 to-transparent" />
+            <div className="fixed inset-x-0 bottom-0 h-40 bg-clip-out" />
           </div>
         ) : null}
       </div>
