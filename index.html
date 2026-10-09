@@ -30,6 +30,7 @@
     <meta property="og:image:alt" content="Commit4 by Marius Bălaj, featuring a classic LCD game console." />
 
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@balajmarius" />
     <meta name="twitter:image" content="https://commit4.balajmarius.com/og-image.png" />
     <meta name="twitter:image:alt" content="Commit4 by Marius Bălaj, featuring a classic LCD game console." />
     <meta name="twitter:title" content="COMMIT4 — Retro LCD Game by Balaj Marius" />
@@ -41,31 +42,62 @@
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": ["VideoGame", "WebApplication"],
-        "name": "COMMIT4",
-        "url": "https://commit4.balajmarius.com/",
-        "image": "https://commit4.balajmarius.com/og-image.png",
-        "description": "A throwback to classic LCD games, built for GitHub Game Off 2017. Winner of Best Theme Interpretation.",
-        "creator": {
-          "@type": "Person",
-          "name": "Balaj Marius",
-          "url": "https://balajmarius.com/",
-          "sameAs": "https://github.com/balajmarius"
-        },
-        "award": "Best Theme Interpretation — GitHub Game Off 2017",
-        "citation": "https://github.blog/open-source/gaming/game-off-2017-winners/",
-        "genre": ["Arcade", "Shooter"],
-        "gamePlatform": "Web browser",
-        "operatingSystem": "Any",
-        "applicationCategory": "GameApplication",
-        "playMode": "https://schema.org/SinglePlayer",
-        "inLanguage": "en",
-        "isAccessibleForFree": true,
-        "offers": {
-          "@type": "Offer",
-          "price": 0
-        },
-        "sameAs": "https://balajmarius.itch.io/commit4"
+        "@graph": [
+          {
+            "@type": "Person",
+            "@id": "https://balajmarius.com/#person",
+            "name": "Marius Bălaj",
+            "url": "https://balajmarius.com",
+            "jobTitle": "Managing Director (Romania)",
+            "worksFor": {
+              "@type": "Organization",
+              "name": "The Sandbox",
+              "url": "https://www.zf.ro/business-hi-tech/tranzactie-in-segmentul-web3-metaverse-the-sandbox-achizitioneaza-un-22681801"
+            },
+            "sameAs": [
+              "https://github.com/balajmarius",
+              "https://www.linkedin.com/in/marius-balaj",
+              "https://x.com/balajmarius",
+              "https://www.goodreads.com/user/show/47935304-marius-balaj"
+            ]
+          },
+          {
+            "@type": ["VideoGame", "WebApplication"],
+            "@id": "https://commit4.balajmarius.com/#game",
+            "name": "COMMIT4",
+            "url": "https://commit4.balajmarius.com/",
+            "image": "https://commit4.balajmarius.com/og-image.png",
+            "description": "A throwback to classic LCD games, built for GitHub Game Off 2017. Winner of Best Theme Interpretation.",
+            "creator": {
+              "@id": "https://balajmarius.com/#person"
+            },
+            "award": "Best Theme Interpretation — GitHub Game Off 2017",
+            "citation": "https://github.blog/open-source/gaming/game-off-2017-winners/",
+            "genre": ["Arcade", "Shooter"],
+            "gamePlatform": "Web browser",
+            "operatingSystem": "Any",
+            "applicationCategory": "GameApplication",
+            "playMode": "https://schema.org/SinglePlayer",
+            "inLanguage": "en",
+            "isAccessibleForFree": true,
+            "offers": {
+              "@type": "Offer",
+              "price": 0
+            },
+            "sameAs": "https://balajmarius.itch.io/commit4"
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://commit4.balajmarius.com/#website",
+            "url": "https://commit4.balajmarius.com/",
+            "name": "COMMIT4",
+            "description": "A throwback to classic LCD games, built for GitHub Game Off 2017. Winner of Best Theme Interpretation.",
+            "inLanguage": "en-US",
+            "publisher": {
+              "@id": "https://balajmarius.com/#person"
+            }
+          }
+        ]
       }
     </script>
   </head>
